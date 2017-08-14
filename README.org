@@ -1,0 +1,35 @@
+libsndwch
+=========
+
+* External API
+
+** Merge  multiple .SVG files into an .SVG file
+
+   swc_err_t swc_merge(const char ** in_paths, size_t in_paths_size, const char* out_path);  
+
+** Parse a .yaml file into a list of cut_3d_t 
+
+   swc_err_t swc_parse(const char* in_file_path, cut_3d_t *cuts, size_t size, size_t *parsed);
+
+** Merge a sequence of cut_3d_t
+
+   swc_err_t swc_merge(cut_3d_t *in_cuts, size_t in_cuts_size, cut_3d_t *out_cuts, size_t out_cuts_size, size_t out_cuts_written);   
+
+** Write a cut_3d_t into an an .SVG file
+
+   swc_err_t swc_write(cut_3d_t *cut, const char* out_file_path);
+
+* Internal API
+
+  ...
+
+* Dependencies
+
+- cmake
+- gtest
+- libyaml
+- libxml
+
+* Build
+
+  cd build && cmake .. && make
