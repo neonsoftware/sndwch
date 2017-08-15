@@ -1,7 +1,8 @@
-#include "stddef.h"
-#include "strings.h"
-/* 
- * 
+#include <stddef.h>
+#include <strings.h>
+
+/*
+ *
 
 what do i want:
 
@@ -12,7 +13,7 @@ place at (x,y) and h_min, h_max
 
 
 -cut: /evefa/vadfa/
-  x:      57  
+  x:      57
   y:      10
   z_min:  4
   z_max:  6
@@ -35,13 +36,13 @@ layers_t
 
 SliceByMM : 3dcuts to lauers
 
-MergeEqualLayers : given a list of layers, merges the same  
+MergeEqualLayers : given a list of layers, merges the same
 
 writeLayersToFile
 
 writeVisual : write visual makes a svg file that shows them one above the other
 
-MakeSandwich : 
+MakeSandwich :
 
 
 
@@ -59,9 +60,9 @@ static const size_t CUTS_MAX = 10;
 typedef int snd_err_t;
 
 /* Custom error codes */
-static const snd_err_t SND_OK = 0;
-static const snd_err_t SND_ERR_NO_SPACE = 0;
-static const snd_err_t SND_O = 0;
+static const snd_err_t SWC_OK = 0;
+static const snd_err_t SWC_NO_SPACE = -1;
+static const snd_err_t SWC_O = -2;
 
 typedef struct {
 	char path[PATH_MAX];
@@ -82,18 +83,11 @@ typedef struct {
 } layer_t;
 
 /* reads all the SVG elements of a file into a buffer */
-snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len)
-{
-	return SND_OK;
-}
+snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len);
 
 /* */
-int isCutEquivalent(cut_2d_t *a, cut_2d_t *b)
-{
-	if (strcmp(a->path, b->path) == 0 && a->x == b->x && a->y == b->y)
-		return 0;
-	else
-		return 1;
-}
+int isCutEquivalent(cut_2d_t *a, cut_2d_t *b);
 
-snd_err_t svg_group_end(char *in) { return SND_OK; }
+snd_err_t svg_group_end(char *in);
+
+snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
