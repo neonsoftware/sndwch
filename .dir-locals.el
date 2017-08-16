@@ -1,1 +1,1 @@
-( ( nil . ( (compile-command . "make -C ../build") ) ) )
+( ( nil . ( (compile-command . "make -C ../build all test") ) ) )

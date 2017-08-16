@@ -1,16 +1,16 @@
 # define  the  executable  in terms  of the  source  files
-add_executable(test_syntaxe  main.c)
+add_executable(test_bin  test.c)
+target_include_directories(test_bin PUBLIC ../include)
+target_link_libraries(test_bin LINK_PUBLIC Sndwch)
 
 # copy test comparison files 
-file(COPY expected DESTINATION .)
 file(COPY assets DESTINATION .)
-include_directories(../include)
 
 # add_custom_target(test_uk.sh ALL  DEPENDS ${file_dest })
-
-add_test(NAME test_syntaxe  COMMAND  ./test_syntaxe)
-add_test(NAME comp_res COMMAND diff -q assets/a.svg assets/b.svg)
-
-target_link_libraries (test_syntaxe LINK_PUBLIC Sndwch)
-
 # add_test(NAME  test_uk  COMMAND  ./ test_uk.sh)
+
+# proper testing
+add_test(NAME test  COMMAND  ./test_bin)
+add_test(NAME verify_merge COMMAND diff -q ./merged.svg assets/a_b_merged.svg)
+
+
