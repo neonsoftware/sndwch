@@ -62,7 +62,7 @@ typedef int snd_err_t;
 /* Custom error codes */
 static const snd_err_t SWC_OK = 0;
 static const snd_err_t SWC_NO_SPACE = -1;
-static const snd_err_t SWC_O = -2;
+static const snd_err_t SWC_ERROR = -2;
 
 typedef struct {
 	char path[PATH_MAX];

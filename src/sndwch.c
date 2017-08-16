@@ -39,14 +39,13 @@ static void openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy)
 			printf("testXmlwriterTree: Error creating the xml node\n");
 			return;
 		}
-		
+
 		xmlNodePtr node_copy = xmlCopyNode(rootNode, 1);
 		if (node_copy == NULL) {
 			printf("testXmlwriterTree: Error creating the xml node\n");
 			return;
 		}
-
-		xmlAddChild(node_to_copy, node_copy);
+		xmlAddChildList(node_to_copy, node_copy->children);
 
 		/* free up the resulting document */
 		xmlFreeDoc(doc);
@@ -60,75 +59,65 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 
 	LIBXML_TEST_VERSION
 
-	xmlNodePtr rootCopy;
-
-	xmlTextWriterPtr writer;
 	int rc;
+	xmlNodePtr rootCopy;
+	xmlTextWriterPtr writer;
 	xmlDocPtr doc;
 
-	//	xmlNodePtr root;
-
-
-
-
-    /* Create a new XML DOM tree, to which the XML document will be
-     * written */
-    doc = xmlNewDoc(BAD_CAST XML_DEFAULT_VERSION);
-    if (doc == NULL) {
-        printf
-            ("testXmlwriterTree: Error creating the xml document tree\n");
-        return SWC_OK;
-    }
-
-    /* Create a new XML node, to which the XML document will be
-     * appended */
-xmlNodePtr    node = xmlNewDocNode(doc, NULL, BAD_CAST "EXAMPLE", NULL);
-    if (node == NULL) {
-        printf("testXmlwriterTree: Error creating the xml node\n");
-        return SWC_OK;
-    }
-
-    /* Make ELEMENT the root node of the tree */
-    xmlDocSetRootElement(doc, node);
-
-
-    /* Create a new XmlWriter for DOM tree, with no compression. */
-    writer = xmlNewTextWriterTree(doc, node, 0);
-    if (writer == NULL) {
-        printf("testXmlwriterTree: Error creating the xml writer\n");
-        return SWC_OK;
-    }
-
-    /* Start the document with the xml default for the version,
-     * encoding ISO 8859-1 and the default for the standalone
-     * declaration. */
-    rc = xmlTextWriterStartDocument(writer, NULL, MY_ENCODING, NULL);
-    if (rc < 0) {
-        printf("testXmlwriterTree: Error at xmlTextWriterStartDocument\n");
-        return SWC_OK;
-    }
-
-
-      xmlNodePtr root = xmlDocGetRootElement(doc);
-                if (root == NULL) {
-                        printf("testXmlwriterTree: Error creating the xml node\n");
-                        return SWC_OK;
-                }
-
-	
-	for (size_t i = 0; i < in_paths_size; ++i) {
-		// exampleFunc(in_paths[i]);
-		openAndCopyRootNode(in_paths[i], root);
-		//xmlAddChild(root, rootCopy);
-		// writeOut(in_paths[i]);
+	/* Create a new XML DOM tree, to which the XML document will be
+	 * written */
+	doc = xmlNewDoc(BAD_CAST XML_DEFAULT_VERSION);
+	if (doc == NULL) {
+		printf("testXmlwriterTree: Error creating the xml document tree\n");
+		return SWC_ERROR;
 	}
 
-rc = xmlTextWriterEndDocument(writer);
-                if (rc < 0) {
-                        printf("testXmlwriterDoc: Error at xmlTextWriterEndDocument\n");
-                        return SWC_OK;;
-                }
+	/* Create a new XML node, to which the XML document will be
+	 * appended */
+	xmlNodePtr node = xmlNewDocNode(doc, NULL, BAD_CAST "svg", NULL);
+	if (node == NULL) {
+		printf("testXmlwriterTree: Error creating the xml node\n");
+		return SWC_ERROR;
+	}
+		
+        xmlNewProp(node, BAD_CAST "xmlns", BAD_CAST "http://www.w3.org/2000/svg");
+        xmlNewProp(node, BAD_CAST "xmlns:xlink", BAD_CAST "http://www.w3.org/1999/xlink");
 	
+	/* Make ELEMENT the root node of the tree */
+	xmlDocSetRootElement(doc, node);
+
+	/* Create a new XmlWriter for DOM tree, with no compression. */
+	writer = xmlNewTextWriterTree(doc, node, 0);
+	if (writer == NULL) {
+		printf("testXmlwriterTree: Error creating the xml writer\n");
+		return SWC_ERROR;
+	}
+
+	/* Start the document with the xml default for the version,
+	 * encoding ISO 8859-1 and the default for the standalone
+	 * declaration. */
+	//rc = xmlTextWriterStartDocument(writer, NULL, MY_ENCODING, NULL);
+	if (rc < 0) {
+		printf("testXmlwriterTree: Error at xmlTextWriterStartDocument\n");
+		return SWC_ERROR;
+	}
+
+	xmlNodePtr root = xmlDocGetRootElement(doc);
+	if (root == NULL) {
+		printf("testXmlwriterTree: Error creating the xml node\n");
+		return SWC_ERROR;
+	}
+
+	for (size_t i = 0; i < in_paths_size; ++i) {
+		openAndCopyRootNode(in_paths[i], root);
+	}
+
+	rc = xmlTextWriterEndDocument(writer);
+	if (rc < 0) {
+		printf("testXmlwriterDoc: Error at xmlTextWriterEndDocument\n");
+		return SWC_ERROR;
+	}
+
 	xmlFreeTextWriter(writer);
 	xmlSaveFileEnc("./merged.svg", doc, MY_ENCODING);
 
@@ -161,8 +150,6 @@ static void exampleFunc(const char *filename)
 	/* free up the parser context */
 	xmlFreeParserCtxt(ctxt);
 }
-
-
 
 static void writeOut(const char *filename)
 {
