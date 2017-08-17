@@ -1,6 +1,50 @@
 #include <stddef.h>
 #include <strings.h>
 
+/* Config */
+static const size_t PATH_MAX = 256;
+static const size_t CUTS_MAX = 10;
+
+/* Custom error message type */
+typedef int snd_err_t;
+
+/* Custom error codes */
+static const snd_err_t SWC_OK = 0;
+static const snd_err_t SWC_ERR_IO_WRITE = -1;
+static const snd_err_t SWC_ERR_IN_FILE = -2;
+static const snd_err_t SWC_ERR_ALLOC = -3;
+
+typedef struct {
+	char path[PATH_MAX];
+	float x;
+	float y;
+} cut_2d_t;
+
+typedef struct {
+	cut_2d_t cut;
+	float zmin;
+	float zmax;
+} cut_3d_t;
+
+typedef struct {
+	cut_2d_t cut[CUTS_MAX];
+	float zmin;
+	float zmax;
+} layer_t;
+
+/* reads all the SVG elements of a file into a buffer */
+snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len);
+
+/* */
+int isCutEquivalent(cut_2d_t *a, cut_2d_t *b);
+
+snd_err_t svg_group_end(char *in);
+
+snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
+
+
+
+
 /*
  *
 
@@ -51,43 +95,3 @@ MakeSandwich :
  *
  *
  */
-
-/* Config */
-static const size_t PATH_MAX = 256;
-static const size_t CUTS_MAX = 10;
-
-/* Custom error message type */
-typedef int snd_err_t;
-
-/* Custom error codes */
-static const snd_err_t SWC_OK = 0;
-static const snd_err_t SWC_NO_SPACE = -1;
-static const snd_err_t SWC_ERROR = -2;
-
-typedef struct {
-	char path[PATH_MAX];
-	float x;
-	float y;
-} cut_2d_t;
-
-typedef struct {
-	cut_2d_t cut;
-	float zmin;
-	float zmax;
-} cut_3d_t;
-
-typedef struct {
-	cut_2d_t cut[CUTS_MAX];
-	float zmin;
-	float zmax;
-} layer_t;
-
-/* reads all the SVG elements of a file into a buffer */
-snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len);
-
-/* */
-int isCutEquivalent(cut_2d_t *a, cut_2d_t *b);
-
-snd_err_t svg_group_end(char *in);
-
-snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
