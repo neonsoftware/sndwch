@@ -1,8 +1,8 @@
-#include "sndwch.h"
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 #include <stdio.h>
+#include "sndwch.h"
 
 #define MY_ENCODING "ISO-8859-1"
 
@@ -11,8 +11,7 @@
  * @filename: a filename or an URL
  *
  * Parse and validate the resource and free the resulting tree
-makeg */
-
+*/
 static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy)
 {
 	xmlParserCtxtPtr ctxt; /* the parser context */
@@ -51,6 +50,7 @@ static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_co
 	}
 	/* free up the parser context */
 	xmlFreeParserCtxt(ctxt);
+	return SWC_OK;
 }
 
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path)
@@ -87,10 +87,10 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 }
 
 /* reads all the SVG elements of a file into a buffer */
-snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len) { return SWC_OK; }
+snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t buf_len) { return SWC_OK; }
 
 /* */
-int isCutEquivalent(cut_2d_t *a, cut_2d_t *b)
+int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
 {
 	if (strcmp(a->path, b->path) == 0 && a->x == b->x && a->y == b->y)
 		return 0;

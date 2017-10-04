@@ -1,9 +1,10 @@
 #include <stddef.h>
+#include <stdint.h>
 #include <strings.h>
 
-/* Config */
-static const size_t PATH_MAX = 256;
-static const size_t CUTS_MAX = 10;
+/* Limits */
+static const size_t swc_max_path = 256;
+static const size_t swc_max_cuts = 10;
 
 /* Custom error message type */
 typedef int snd_err_t;
@@ -15,35 +16,32 @@ static const snd_err_t SWC_ERR_IN_FILE = -2;
 static const snd_err_t SWC_ERR_ALLOC = -3;
 
 typedef struct {
-	char path[PATH_MAX];
+	char path[swc_max_path];
 	float x;
 	float y;
-} cut_2d_t;
+} swc_cut2d_t;
 
 typedef struct {
-	cut_2d_t cut;
+	swc_cut2d_t cut;
 	float zmin;
 	float zmax;
-} cut_3d_t;
+} swc_cut3d_t;
 
 typedef struct {
-	cut_2d_t cut[CUTS_MAX];
+	swc_cut2d_t cut[swc_max_cuts];
 	float zmin;
 	float zmax;
-} layer_t;
+} swc_layer_t;
 
 /* reads all the SVG elements of a file into a buffer */
-snd_err_t importSVGElementsFromFile(const char *path, char *buf, size_t buf_len);
+snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t buf_len);
 
 /* */
-int isCutEquivalent(cut_2d_t *a, cut_2d_t *b);
+int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
 
 snd_err_t svg_group_end(char *in);
 
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
-
-
-
 
 /*
  *
