@@ -4,20 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAXLINE 4096      /* max line length */
+static const size_t max_line = 4096; /* max line length */
 
 /*
- * Print a message and return to caller.
- * Caller specifies "errnoflag".
- */
+** Print a message and return to caller.
+** Caller specifies "errnoflag".
+*/
 static void err_doit(int errnoflag, int error, const char *fmt, va_list ap)
 {
-	char buf[MAXLINE];
+	char buf[max_line];
 
-	vsnprintf(buf, MAXLINE - 1, fmt, ap);
+	vsnprintf(buf, max_line - 1, fmt, ap);
 
 	if (errnoflag)
-		snprintf(buf + strlen(buf), MAXLINE - strlen(buf) - 1, ": %s", strerror(error));
+		snprintf(buf + strlen(buf), max_line - strlen(buf) - 1, ": %s", strerror(error));
 
 	strcat(buf, "\n");
 	fflush(stdout); /* in case stdout and stderr are the same */
@@ -25,11 +25,10 @@ static void err_doit(int errnoflag, int error, const char *fmt, va_list ap)
 	fflush(NULL); /* flushes all stdio output streams */
 }
 
-
 /*
- * Fatal error unrelated to a system call.
- * Print a message and terminate.
- */
+** Fatal error unrelated to a system call.
+** Print a message and terminate.
+*/
 void err_quit(const char *fmt, ...)
 {
 	va_list ap;
@@ -40,9 +39,9 @@ void err_quit(const char *fmt, ...)
 }
 
 /*
- * Fatal error related to a system call.
- * Print a message, dump core, and terminate.
- */
+** Fatal error related to a system call.
+** Print a message, dump core, and terminate.
+*/
 void err_dump(const char *fmt, ...)
 {
 	va_list ap;
@@ -54,7 +53,6 @@ void err_dump(const char *fmt, ...)
 	exit(1); /* shouldn′t get here */
 }
 
-
 int main()
 {
 
@@ -63,17 +61,17 @@ int main()
 	/*------------- merging two files -----------------------*/
 	{
 
-	  const char *p1 = "./assets/a.svg";
+		const char *p1 = "./assets/a.svg";
+		const char *p1_ = "/opt/garage/sndwch/test/assets/a.svg";
 		const char *p2 = "./assets/b.svg";
+		const char *p2_ = "/opt/garage/sndwch/test/assets/b.svg";
 		const char *paths[2];
 		paths[0] = p1;
 		paths[1] = p2;
 		res = swc_merge(paths, 2, "./merged.svg");
 		if (res != SWC_OK)
 			err_quit("Error Merging.");
-
 	}
-
 	/*--------------------------------------------------------*/
 
 	return 0;
