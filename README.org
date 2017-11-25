@@ -1,9 +1,29 @@
+
 libsndwch
-=========
+
+* What problem does it solve 
+
+Finally the thing that I want most is to create a box that: 
+
+- can be designed and maintained without porper 3D tools
+- can be designed and maintained with cross-platform, free tools
+- can be produced with a laser cutter
+- has solid joints
+- looks professional 
+
+* Use Cases
+
+1 - I should be able to merge some SVG files into a single one.
+
+2 - I should be able to merge and also translate some SVG files into a single one, by using a .yaml file
+
+3 - I should be able to represent a 3D object as a collection of extruded 2D polygons. 
+Each 2D polygon is contained in a SVG file. 
+The extrusions of such poligons are described in a single .yaml file.
 
 * External API
 
-** Merge  multiple .SVG files into an .SVG file
+** Merge  multiple .SVG files into an .SVG file, Use Case 1
 
    swc_err_t swc_merge(const char ** in_paths, size_t in_paths_size, const char* out_path);  
 

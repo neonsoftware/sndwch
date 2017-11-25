@@ -6,12 +6,24 @@
 
 #define MY_ENCODING "ISO-8859-1"
 
-/**
- * exampleFunc:
- * @filename: a filename or an URL
- *
- * Parse and validate the resource and free the resulting tree
+/*************** static local functions, declarations *********************************/
+
+/* @brief Opens an SVG file, and copies the XML content into an xmlNodePtr
+**
+** @param filename A filename or an URL
+** @param node_to_copy the destination xmlNodePtr
+**
+** @return SWC_OK in case of success, SWC_ERR_IN_FILE for file issues, 
+** SWC_ERR_ALLOC for no space left. 
 */
+static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy);
+
+/* @brief Deep equivalence of two swc_cut2d_t
+*/
+static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
+
+/*************** static local functions, implementations ******************************/
+
 static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy)
 {
 	xmlParserCtxtPtr ctxt; /* the parser context */
@@ -53,6 +65,18 @@ static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_co
 	return SWC_OK;
 }
 
+int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
+{
+        if (strcmp(a->path, b->path) == 0 && a->x == b->x && a->y == b->y)
+                return 0;
+        else
+                return 1;
+}
+
+/******************** API functions, implementations ********************************************/
+
+snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t buf_len) { return SWC_OK; }
+
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path)
 {
 	int res;
@@ -85,17 +109,3 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 	
 	return SWC_OK;
 }
-
-/* reads all the SVG elements of a file into a buffer */
-snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t buf_len) { return SWC_OK; }
-
-/* */
-int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
-{
-	if (strcmp(a->path, b->path) == 0 && a->x == b->x && a->y == b->y)
-		return 0;
-	else
-		return 1;
-}
-
-snd_err_t svg_group_end(char *in) { return SWC_OK; }
