@@ -16,6 +16,3 @@ set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(TESTS ${CMAKE_SOURCE_DIR}/test)
 add_subdirectory(${SRC})
 add_subdirectory(${TESTS})
-
-
-

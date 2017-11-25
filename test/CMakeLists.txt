@@ -11,6 +11,6 @@ file(COPY assets DESTINATION .)
 
 # proper testing
 add_test(NAME test  COMMAND  ./test_bin)
-add_test(NAME verify_merge COMMAND diff -q ./merged.svg assets/a_b_merged.svg)
-
-
+add_test(NAME verify_merge COMMAND diff -q ./merged.svg assets/expected/a_b_merged.svg)
+add_test(NAME verify_parse_yaml COMMAND diff -q ./parsed.txt assets/expected/2d_cuts_list.txt)
+#add_test(NAME verify_parse_2dcuts COMMAND diff -q ./parsed.yaml assets/cuts.yaml)
