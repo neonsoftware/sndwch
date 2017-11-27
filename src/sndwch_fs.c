@@ -106,8 +106,10 @@ bool parseCutFile(yaml_parser_t *parser, cut_file_t *cut)
 	if (!parseValueScalarFloat(parser, &(cut->zend)))
 		return false;
 
-	printf("Cut: %s - %.1f - %.1f - %.1f - %.1f\n", cut->path, cut->x, cut->y, cut->zstart,
-	       cut->zend);
+        /* printf("Cut: %s - %.1f - %.1f - %.1f - %.1f\n",
+        **          cut->path, cut->x, cut->y, cut->zstart, cut->zend);
+        */
+
 	return true;
 }
 
@@ -120,7 +122,7 @@ bool parseCutFile(yaml_parser_t *parser, cut_file_t *cut)
  * @param cuts_len output, number of cuts found
  * @todo of course. error checking
  */
-snd_err_t read_cut_files_from_yaml(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr)
+snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr)
 {
 
 	*cuts_found_ptr = 0;
