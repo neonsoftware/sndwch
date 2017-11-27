@@ -40,6 +40,15 @@ static const snd_err_t SWC_ERR_IO_WRITE = -1;
 static const snd_err_t SWC_ERR_IN_FILE = -2;
 static const snd_err_t SWC_ERR_ALLOC = -3;
 
+
+typedef struct {
+        char path[swc_max_path]; /**< path of the SVG file */
+        float x;		 /**< x offset */
+        float y;		 /**< y offset */
+        float zstart;	 /**< y offset */
+        float zend;	 /**< y offset */
+} cut_file_t;
+
 /* @brief An SVG descibes a 2D shape. Such SVG will placed at a (x,y) offset
 */
 typedef struct {
@@ -85,6 +94,8 @@ snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t 
 */
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
 
+snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr);
+  
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
