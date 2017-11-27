@@ -1,4 +1,4 @@
-add_library (Sndwch sndwch.c)
+add_library (Sndwch sndwch.c sndwch_fs.c)
 
 include_directories(${LIBXML2_INCLUDE_DIR})
 
