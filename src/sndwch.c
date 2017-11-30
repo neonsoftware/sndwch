@@ -102,7 +102,7 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 	}
 
 	/* save file */
-	res = xmlSaveFileEnc("./merged.svg", doc, MY_ENCODING);
+        res = xmlSaveFileEnc(out_path, doc, MY_ENCODING);
 	if (res == -1) {
 		return SWC_ERR_IO_WRITE;
 	}

@@ -2,6 +2,7 @@
 #include <errno.h>  /* for definition of errno */
 #include <stdarg.h> /* ISO C variable aruments */
 #include <stdbool.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <yaml.h>
@@ -62,6 +63,10 @@ int main()
 
 	snd_err_t res = SWC_OK;
 
+        /* config file read */
+        cut_file_t **cuts;
+        int cuts_len;
+
 	/*------------- Reading parameters -----------------------*/
 	{
                 /* prepare file */
@@ -69,8 +74,6 @@ int main()
                 if( fp == NULL )
                     return 1;
 
-		cut_file_t **cuts;
-		int cuts_len;
                 swc_read_conf_file("./assets/cuts.yaml", &cuts, &cuts_len);
 
 		for (size_t i = 0; i < cuts_len; i++) {
@@ -80,14 +83,12 @@ int main()
 		}
 
                 fclose(fp);
-	}
+        }
 
 	/*------------- merging two files -----------------------*/
 	{
-		const char *p1 = "./assets/a.svg";
-		const char *p1_ = "/opt/garage/sndwch/test/assets/a.svg";
-		const char *p2 = "./assets/b.svg";
-		const char *p2_ = "/opt/garage/sndwch/test/assets/b.svg";
+                const char *p1 = "./assets/a.svg";
+                const char *p2 = "./assets/b.svg";
 		const char *paths[2];
 		paths[0] = p1;
 		paths[1] = p2;
@@ -96,6 +97,21 @@ int main()
 			err_quit("Error Merging.");
 	}
 	/*--------------------------------------------------------*/
+
+
+        /*------------- reading and merging two files -----------------------*/
+        {
+
+                const char *paths[2];
+                paths[0] = cuts[0]->path;
+                paths[1] = cuts[1]->path;
+
+                res = swc_merge((const char **)paths, 2, "./parsed_and_merged.svg");
+                if (res != SWC_OK)
+                        err_quit("Error Merging.");
+        }
+        /*--------------------------------------------------------*/
+
 
 	return 0;
 }
