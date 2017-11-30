@@ -95,6 +95,8 @@ snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t 
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
 
 snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr);
+
+snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *out_path);
   
 #ifdef __cplusplus
 } /* extern "C" */

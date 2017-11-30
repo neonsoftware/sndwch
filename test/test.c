@@ -112,6 +112,14 @@ int main()
         }
         /*--------------------------------------------------------*/
 
+        /*------------- reading and merging two files -----------------------*/
+        {
+                res = swc_translate_and_merge(cuts, cuts_len, "./translated.svg");
+                if (res != SWC_OK)
+                        err_quit("Error Merging.");
+        }
+        /*--------------------------------------------------------*/
+
 
 	return 0;
 }
