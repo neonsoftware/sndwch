@@ -64,15 +64,22 @@ int main()
 
 	/*------------- Reading parameters -----------------------*/
 	{
+                /* prepare file */
+                FILE *fp = fopen("./log_config_parse.txt", "w+");
+                if( fp == NULL )
+                    return 1;
+
 		cut_file_t **cuts;
 		int cuts_len;
                 swc_read_conf_file("./assets/cuts.yaml", &cuts, &cuts_len);
 
 		for (size_t i = 0; i < cuts_len; i++) {
 			cut_file_t *cut_ptr = cuts[i];
-			printf("found: %s - %.1f - %.1f - %.1f - %.1f\n", cut_ptr->path, cut_ptr->x,
+                        fprintf(fp, "%s - %.1f - %.1f - %.1f - %.1f\n", cut_ptr->path, cut_ptr->x,
 			       cut_ptr->y, cut_ptr->zstart, cut_ptr->zend);
 		}
+
+                fclose(fp);
 	}
 
 	/*------------- merging two files -----------------------*/
