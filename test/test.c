@@ -65,7 +65,9 @@ int main()
 
         /* config file read */
         cut_file_t **cuts;
+        cut_file_t **cuts_sliced;
         int cuts_len;
+        int cuts_sliced_len;
 
 	/*------------- Reading parameters -----------------------*/
 	{
@@ -99,7 +101,7 @@ int main()
 	/*--------------------------------------------------------*/
 
 
-        /*------------- reading and merging two files -----------------------*/
+        /*------------- reading and merging two files ------------*/
         {
 
                 const char *paths[2];
@@ -112,13 +114,34 @@ int main()
         }
         /*--------------------------------------------------------*/
 
-        /*------------- reading and merging two files -----------------------*/
+        /*------------- reading and merging two files ------------*/
         {
                 res = swc_translate_and_merge(cuts, cuts_len, "./translated.svg");
                 if (res != SWC_OK)
                         err_quit("Error Merging.");
         }
         /*--------------------------------------------------------*/
+
+        /*------------- reading and merging two files ------------*/
+        {
+                FILE *fp = fopen("./log_slice.txt", "w+");
+                if( fp == NULL )
+                        return 1;
+
+                res = swc_slice(cuts, cuts_len, &cuts_sliced, &cuts_sliced_len);
+                if (res != SWC_OK)
+                        err_quit("Error Merging.");
+
+                for (size_t i = 0; i < cuts_sliced_len; i++) {
+                        cut_file_t *cut_ptr = cuts_sliced[i];
+                        fprintf(fp, "%s - %.1f - %.1f - %.1f - %.1f\n", cut_ptr->path, cut_ptr->x,
+                               cut_ptr->y, cut_ptr->zstart, cut_ptr->zend);
+                }
+        }
+        /*--------------------------------------------------------*/
+
+
+
 
 
 	return 0;

@@ -97,6 +97,16 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr);
 
 snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *out_path);
+
+/*
+** @brief swc_slice Cuts every cut_file_t passed in an input array into many cut_file_t of 0.5 mm thckness
+** @param cuts_in array of input cuts
+** @param cuts_in_len length of cuts_in
+** @param cuts_out output cuts destination
+** @param cuts_out_len pointer number of output cuts created
+** @return
+*/
+snd_err_t swc_slice(cut_file_t **cuts_in, int cuts_in_len, cut_file_t ***cuts_out, int *cuts_out_len);
   
 #ifdef __cplusplus
 } /* extern "C" */

@@ -66,7 +66,7 @@ bool parseValueScalarFloat(yaml_parser_t *parser, float *valPtr)
 	char buf[max_line];
 	/* checking strtof result */
 	char *endptr;
-	int res = 0;
+        float res = 0;
 
 	/* read scalar string from yaml */
 	if (!parseValueScalarString(parser, buf, max_line))

@@ -23,6 +23,23 @@ static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_co
 */
 static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
 
+/*
+** @brief parseFileToGroupNode parses an XML file into a xmlNodePtr XML group element
+** @param filePath path of the source XML file
+** @param dst the destination XML group element
+** @return SWC_OK in case of success, SWC_ERR_IN_FILE or SWC_ERR_ALLOC otherwise
+*/
+static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst);
+
+/*
+** @brief xmlTranslateGrp Adds a transformation parameter to an XML group element
+** @param grp the XML group element to translate
+** @param x the translateion x coordinate
+** @param y the translateion y coordinate
+** @return SWC_OK in case of success, or SWC_ERR_ALLOC otherwise
+**/
+snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y);
+
 /*************** static local functions, implementations ******************************/
 
 static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
@@ -71,94 +88,19 @@ static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
         return SWC_OK;
 }
 
-/**
- * @brief parseFileToNode
- * @param filename source file path
- * @param dst destination XML Node
- * @return
- */
-static snd_err_t parseFileToNode(const char *filePath, xmlNodePtr *dst)
+snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
 {
-        xmlParserCtxtPtr ctxt; /* the parser context */
-        xmlDocPtr doc;	 /* the resulting document tree */
-
-        /* create a parser context */
-        ctxt = xmlNewParserCtxt();
-        if (ctxt == NULL) {
-          return SWC_ERR_ALLOC;
+        if (grp == NULL) {
+                return SWC_ERR_ALLOC; /* TODO provide a better error*/
         }
-        /* parse the file, activating the DTD validation option */
-        doc = xmlCtxtReadFile(ctxt, filePath, NULL, 0);
-        /* check if parsing suceeded */
-        if (doc == NULL) {
-                fprintf(stderr, "Failed to parse %s\n", filePath);
-        } else {
-                /* check if validation suceeded */
-                if (ctxt->valid == 0)
-                        fprintf(stderr, "Failed to validate %s\n", filePath);
 
-                xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-                if (rootNode == NULL) {
-                        printf("testXmlwriterTree: Error creating the xml node\n");
-                        return SWC_ERR_IN_FILE;
-                }
+        char * translate_string = (char *) calloc(MAX_TRANSLATION_LEN, sizeof(char));
+        sprintf(translate_string, "translate(%.1f, %.1f)", x, y);
+        xmlNewProp(grp, BAD_CAST "transform", BAD_CAST translate_string);
 
-                *dst = xmlCopyNode(rootNode, 1);
-
-                /* free up the resulting document */
-                xmlFreeDoc(doc);
-        }
-        /* free up the parser context */
-        xmlFreeParserCtxt(ctxt);
         return SWC_OK;
 }
 
-/**
- * @brief openAndCopyRootNode
- * @param filename source XML file
- * @param node_to_copy root where to append the read
- * @return
- */
-static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy)
-{
-	xmlParserCtxtPtr ctxt; /* the parser context */
-	xmlDocPtr doc;	 /* the resulting document tree */
-
-	/* create a parser context */
-	ctxt = xmlNewParserCtxt();
-	if (ctxt == NULL) {
-	  return SWC_ERR_ALLOC;
-	}
-	/* parse the file, activating the DTD validation option */
-	doc = xmlCtxtReadFile(ctxt, filename, NULL, 0);
-	/* check if parsing suceeded */
-	if (doc == NULL) {
-		fprintf(stderr, "Failed to parse %s\n", filename);
-	} else {
-		/* check if validation suceeded */
-		if (ctxt->valid == 0)
-			fprintf(stderr, "Failed to validate %s\n", filename);
-
-		xmlNodePtr rootNode = xmlDocGetRootElement(doc);
-		if (rootNode == NULL) {
-			printf("testXmlwriterTree: Error creating the xml node\n");
-			return SWC_ERR_IN_FILE;
-		}
-
-		xmlNodePtr node_copy = xmlCopyNode(rootNode, 1);
-		if (node_copy == NULL) {
-			printf("testXmlwriterTree: Error creating the xml node\n");
-			return SWC_ERR_IN_FILE ;
-		}
-		xmlAddChildList(node_to_copy, node_copy->children);
-
-		/* free up the resulting document */
-		xmlFreeDoc(doc);
-	}
-	/* free up the parser context */
-	xmlFreeParserCtxt(ctxt);
-	return SWC_OK;
-}
 
 int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
 {
@@ -169,21 +111,6 @@ int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
 }
 
 /******************** API functions, implementations ********************************************/
-
-snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t buf_len) { return SWC_OK; }
-
-snd_err_t swc_translate_grp(xmlNodePtr grp, int x, int y)
-{
-        if (grp == NULL) {
-                return SWC_ERR_ALLOC; /* TODO provide a better error*/
-        }
-
-        char * translate_string = (char *) calloc(MAX_TRANSLATION_LEN, sizeof(char));
-        sprintf(translate_string, "translate(%d, %d)", x, y);
-        xmlNewProp(grp, BAD_CAST "transform", BAD_CAST translate_string);
-
-        return SWC_OK;
-}
 
 snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *out_path){
 
@@ -211,7 +138,7 @@ snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *o
             xmlNodePtr n;
             xmlNodePtr n_translated;
             parseFileToGroupNode(cuts[i]->path, &n);
-            swc_translate_grp(n, 3,4);
+            xmlTranslateGrp(n, cuts[i]->x, cuts[i]->y);
             xmlAddChild(svgRoot, n);
     }
 
@@ -257,4 +184,8 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 	}
 	
 	return SWC_OK;
+}
+
+snd_err_t swc_slice(cut_file_t **cuts_in, int cuts_in_len, cut_file_t ***cuts_out, int *cuts_out_len){
+        return SWC_OK;
 }
