@@ -6,5 +6,5 @@
 - file : ./assets/b.svg
   x : 2.3
   y : 4.0
-  zstart : 11.0
-  zend : 12.0
+  zstart : 10.0
+  zend : 11.0
