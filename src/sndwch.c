@@ -25,7 +25,7 @@ static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
 
 /*************** static local functions, implementations ******************************/
 
-static snd_err_t parseFileToTranslatedGroupNode(const char *filePath, xmlNodePtr *dst)
+static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
 {
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc;	 /* the resulting document tree */
@@ -210,8 +210,8 @@ snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *o
             cut_file_t *cut_ptr = cuts[i];
             xmlNodePtr n;
             xmlNodePtr n_translated;
-            parseFileToTranslatedGroupNode(cuts[i]->path, &n);
-            swc_translate_grp(3,4, n);
+            parseFileToGroupNode(cuts[i]->path, &n);
+            swc_translate_grp(n, 3,4);
             xmlAddChild(svgRoot, n);
     }
 
@@ -245,7 +245,9 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 
 	/* add all files' nodes */
 	for (size_t i = 0; i < in_paths_size; ++i) {
-		openAndCopyRootNode(in_paths[i], svgRoot);
+                xmlNodePtr n;
+                parseFileToGroupNode(in_paths[i], &n);
+                xmlAddChild(svgRoot, n);
 	}
 
 	/* save file */
