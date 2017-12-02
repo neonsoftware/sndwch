@@ -217,7 +217,28 @@ int swc_cutcmp(cut_file_t * a, cut_file_t * b){
     if(a == NULL || b == NULL)
         return -2;
 
-    return strcmp(a->path, b->path);
+    /* comparison order is: path. if is equal, then comparing x, then y. */
+
+    int pathcmp = strcmp(a->path, b->path);
+
+    /* if path differs, the difference is a valid comparison */
+    if(pathcmp != 0)
+        return pathcmp;
+
+    /* path is the same, maybe x differs */
+    if (a->x < b->x)
+        return -1;
+    else if (a->x > b->x)
+        return 1;
+
+    /* no luck, x is the same, checking y */
+    if (a->y < b->y)
+        return -1;
+    else if (a->y > b->y)
+        return 1;
+
+    /* ok, they are equal */
+    return 0;
 }
 
 void swc_cutsort(cut_file_t ** cuts, size_t cuts_len){
@@ -257,6 +278,8 @@ int swc_layercmp(swc_layer_t * a, swc_layer_t * b){
         return 1;
 }
 
+
+
 void swc_layersort(swc_layer_t** layers, size_t layers_len){
 
     size_t i, j;
@@ -278,5 +301,23 @@ void swc_layersort(swc_layer_t** layers, size_t layers_len){
             }
         }
     }
+}
 
+int swc_layer_equivalent_neighbor(swc_layer_t * a, swc_layer_t * b){
+
+    if(a == NULL || b == NULL)
+        return -2;
+
+    if( a->zend != b->zstart && b->zend != a->zstart )
+        return -1;
+
+    if( a->cuts_len != b->cuts_len )
+        return -1;
+
+    /* TODO, for now requires order */
+    for( size_t i = 0; i < b->cuts_len; i++ )
+        if(swc_cutcmp(a->cuts[i], b->cuts[i]) != 0)
+            return -1;
+
+    return 0;
 }
