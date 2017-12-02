@@ -70,9 +70,10 @@ typedef struct {
 **
 */
 typedef struct {
-	swc_cut2d_t cut[swc_max_cuts] /**< set of cuts */;
-	float zmin; /**< z position, start */
-	float zmax; /**< z position, end */
+        cut_file_t *cuts[swc_max_cuts]; /**< set of cuts */
+        size_t cuts_len; /**< number of cuts in the set */
+        float zstart; /**< z position, start */
+        float zend; /**< z position, end */
 } swc_layer_t;
 
 #ifdef __cplusplus
@@ -97,6 +98,33 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, size_t *cuts_found_ptr);
 
 snd_err_t swc_translate_and_merge(cut_file_t **cuts, size_t cuts_len, const char *out_path);
+
+/* @brief Given a set of slice cuts of same z height and different z start and end, groups them in layers,
+** which are sets of cuts of same z position
+*/
+snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** layers_out, size_t *layers_len);
+
+snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len);
+
+snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len);
+
+/* @brief return 0 is a and b are same, -1 if a < b, 1 if b < a
+*/
+int swc_cutcmp(cut_file_t * a, cut_file_t * b);
+
+/* @brief given an array of cut_file_t of length cuts_len, sorts them in ascendent order according to
+ * swc_cutcmp comparison
+*/
+void swc_cutsort(cut_file_t ** cuts, size_t cuts_len);
+
+/* @brief return 0 is a and b are same, -1 if a < b, 1 if b < a
+*/
+int swc_layercmp(swc_layer_t * a, swc_layer_t * b);
+
+/* @brief given an array of swc_layer_t of length layers_in_len, sorts them in ascendent order according to
+ * swc_layercmp comparison
+*/
+void swc_layersort(swc_layer_t** layers, size_t layers_len);
 
 /*
 ** @brief swc_slice Cuts every cut_file_t passed in an input array into many cut_file_t of 0.5 mm thckness

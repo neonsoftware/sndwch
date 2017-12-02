@@ -209,3 +209,74 @@ snd_err_t swc_slice(cut_file_t **cuts_in, size_t cuts_in_len, cut_file_t ***cuts
 
         return SWC_OK;
 }
+
+/************* sort and comparisons **********/
+
+int swc_cutcmp(cut_file_t * a, cut_file_t * b){
+
+    if(a == NULL || b == NULL)
+        return -2;
+
+    return strcmp(a->path, b->path);
+}
+
+void swc_cutsort(cut_file_t ** cuts, size_t cuts_len){
+
+    size_t i, j;
+    cut_file_t *temp = NULL;
+
+    if(cuts == NULL || cuts_len <= 1)
+        return;
+
+
+for (i = 0; i < cuts_len; i++)
+{
+    for (j = 0; j < cuts_len - 1 - i; j++)
+    {
+        if ( swc_cutcmp(cuts[j + 1], cuts[j]) == -1)
+        {
+            temp = cuts[j];
+            cuts[j] = cuts[j + 1];
+            cuts[j + 1] = temp;
+        }
+    }
+}
+
+}
+
+int swc_layercmp(swc_layer_t * a, swc_layer_t * b){
+
+    if(a == NULL || b == NULL)
+        return -2;
+
+    if (a->zstart == b->zstart)
+        return 0;
+    else if (a->zstart < b->zstart)
+        return -1;
+    else
+        return 1;
+}
+
+void swc_layersort(swc_layer_t** layers, size_t layers_len){
+
+    size_t i, j;
+    swc_layer_t *temp = NULL;
+
+    if(layers == NULL || layers_len <= 1)
+        return;
+
+
+    for (i = 0; i < layers_len; i++)
+    {
+        for (j = 0; j < layers_len - 1 - i; j++)
+        {
+            if ( swc_layercmp(layers[j + 1], layers[j]) == -1)
+            {
+                temp = layers[j];
+                layers[j] = layers[j + 1];
+                layers[j + 1] = temp;
+            }
+        }
+    }
+
+}
