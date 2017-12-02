@@ -17,10 +17,7 @@ bool parseKeyScalar(yaml_parser_t *parser, const char *keyName)
 	yaml_parser_scan(parser, &token);
 	bool isScalar = (token.type == YAML_SCALAR_TOKEN);
 	if (!isScalar)
-		return false;
-
-	size_t a = strlen(keyName);
-	size_t b = strlen(token.data.scalar.value);
+                return false;
 
 	bool string_matches = (strcmp((const char *)token.data.scalar.value, keyName) == 0);
 
@@ -122,11 +119,11 @@ bool parseCutFile(yaml_parser_t *parser, cut_file_t *cut)
  * @param cuts_len output, number of cuts found
  * @todo of course. error checking
  */
-snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr)
+snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts_ptr, size_t *cuts_found_ptr)
 {
 
 	*cuts_found_ptr = 0;
-	*cuts = (cut_file_t **)calloc(max_files, sizeof(cut_file_t *));
+        *cuts_ptr = (cut_file_t **)calloc(max_files, sizeof(cut_file_t *));
 
 	/* yaml parsing structs */
 	yaml_parser_t parser;
@@ -158,7 +155,7 @@ snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts
 		cut_file_t *new_cut_file = (cut_file_t *)calloc(1, sizeof(cut_file_t));
 		file_parse_success = parseCutFile(&parser, new_cut_file);
 		if (file_parse_success) {
-			(*cuts)[*cuts_found_ptr] = new_cut_file; /* storing new file */
+                        (*cuts_ptr)[*cuts_found_ptr] = new_cut_file; /* storing new file */
 			*cuts_found_ptr = (*cuts_found_ptr) + 1; /* increasing found count */
 		} else {
 			/* deallocating cut that was ready to be read, but was not */

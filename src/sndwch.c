@@ -6,22 +6,13 @@
 
 #define MY_ENCODING "ISO-8859-1"
 #define MAX_TRANSLATION_LEN 30
+static const size_t max_files = 200; /* max cut_file_t length */
 
 /*************** static local functions, declarations *********************************/
 
-/* @brief Opens an SVG file, and copies the XML content into an xmlNodePtr
-**
-** @param filename A filename or an URL
-** @param node_to_copy the destination xmlNodePtr
-**
-** @return SWC_OK in case of success, SWC_ERR_IN_FILE for file issues, 
-** SWC_ERR_ALLOC for no space left. 
-*/
-static snd_err_t openAndCopyRootNode(const char *filename, xmlNodePtr node_to_copy);
-
 /* @brief Deep equivalence of two swc_cut2d_t
 */
-static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
+//static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
 
 /*
 ** @brief parseFileToGroupNode parses an XML file into a xmlNodePtr XML group element
@@ -38,7 +29,7 @@ static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst);
 ** @param y the translateion y coordinate
 ** @return SWC_OK in case of success, or SWC_ERR_ALLOC otherwise
 **/
-snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y);
+static snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y);
 
 /*************** static local functions, implementations ******************************/
 
@@ -88,7 +79,7 @@ static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
         return SWC_OK;
 }
 
-snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
+static snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
 {
         if (grp == NULL) {
                 return SWC_ERR_ALLOC; /* TODO provide a better error*/
@@ -102,17 +93,19 @@ snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
 }
 
 
-int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
+/*
+static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b)
 {
         if (strcmp(a->path, b->path) == 0 && a->x == b->x && a->y == b->y)
                 return 0;
         else
                 return 1;
 }
+*/
 
 /******************** API functions, implementations ********************************************/
 
-snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *out_path){
+snd_err_t swc_translate_and_merge(cut_file_t **cuts, size_t cuts_len, const char *out_path){
 
     int res;
     xmlDocPtr doc;
@@ -134,9 +127,7 @@ snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *o
     /* add all files' nodes */
 
     for (size_t i = 0; i < cuts_len; i++) {
-            cut_file_t *cut_ptr = cuts[i];
             xmlNodePtr n;
-            xmlNodePtr n_translated;
             parseFileToGroupNode(cuts[i]->path, &n);
             xmlTranslateGrp(n, cuts[i]->x, cuts[i]->y);
             xmlAddChild(svgRoot, n);
@@ -186,6 +177,35 @@ snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out
 	return SWC_OK;
 }
 
-snd_err_t swc_slice(cut_file_t **cuts_in, int cuts_in_len, cut_file_t ***cuts_out, int *cuts_out_len){
+snd_err_t swc_slice(cut_file_t **cuts_in, size_t cuts_in_len, cut_file_t ***cuts_out_ptr, size_t *cuts_out_len_ptr){
+
+        *cuts_out_len_ptr = 0;
+        *cuts_out_ptr = (cut_file_t **)calloc(max_files, sizeof(cut_file_t *));
+
+        for (size_t i = 0; i < cuts_in_len; i++) {
+                cut_file_t *cut_ptr = cuts_in[i];
+
+                /* TODO I should convert to int to avoid float problems on some platforms */
+
+                /* for every cut create N cuts of 0.5mm z height */
+                for (float z = cut_ptr->zstart; z < cut_ptr->zend; z += 0.5){
+                    /* create a new 0.5mm slice */
+                    cut_file_t *new_cut_slice_ptr = (cut_file_t *)calloc(1, sizeof(cut_file_t));
+
+                    if(new_cut_slice_ptr == NULL){
+                        return SWC_ERR_ALLOC;
+                    }
+
+                    /* except for z, it is a copy */
+                    memcpy(new_cut_slice_ptr, cut_ptr, sizeof(cut_file_t));
+                    /* the new slice has a z height of 0.5mm */
+                    new_cut_slice_ptr->zstart = z;
+                    new_cut_slice_ptr->zend = z + 0.5;
+                    /* storing the new cut to out array, and increase counter */
+                    (*cuts_out_ptr)[*cuts_out_len_ptr] = new_cut_slice_ptr; /* storing new file */
+                    *cuts_out_len_ptr = (*cuts_out_len_ptr) + 1;
+                }
+        }
+
         return SWC_OK;
 }
