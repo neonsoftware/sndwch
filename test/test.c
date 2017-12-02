@@ -69,34 +69,70 @@ int main(int argc, const char* argv[])
         size_t cuts_len;
         size_t cuts_sliced_len;
 
+        /* different path */
+        cut_file_t aaa = {"aaa.svg", 0, 1};
+        cut_file_t aab = {"aab.svg", 0, 1};
+        cut_file_t baa = {"baa.svg", 0, 1};
+
+        swc_layer_t la = { {&aaa}, 1, -2.0, -0.5 };
+        swc_layer_t lb = { {&aab, &baa}, 2, 0.5, 1.0 };
+        swc_layer_t lc = { {&aab, &baa}, 2, 2.0, 3.0 };
+
         /*------------- sort and comparison ------------*/
         if(argc == 2 && (strcmp(argv[1], "cutorder") == 0)){
-            cut_file_t aaa = {"aaa.svg", 0, 1};
-            cut_file_t aab = {"aab.svg", 0, 1};
-            cut_file_t baa = {"baa.svg", 0, 1};
 
-            /* cutcmp */
-            assert( swc_cutcmp(&aaa, &aaa) == 0 );
+            /* to aaa, same path, different x */
+            cut_file_t aaax = {"aaa.svg", 1, 1};
+            /* to aaa, different y */
+            cut_file_t aaay = {"aaa.svg", 0, 2};
+            /* same as aaa */
+            cut_file_t aaasame = {"aaa.svg", 0, 1};
+
+
+            /* cutcmp , error */
+            assert( swc_cutcmp(NULL, &aaa) == -2 );
+            assert( swc_cutcmp(&aaa, NULL) == -2 );
+            assert( swc_cutcmp(NULL, NULL) == -2 );
+
+            /* cutcmp, valid */
+            /* by path */
             assert( swc_cutcmp(&aaa, &aab) == -1 );
             assert( swc_cutcmp(&aab, &aaa) == 1 );
             assert( swc_cutcmp(&aab, &baa) == -1 );
             assert( swc_cutcmp(&aaa, &baa) == -1 );
 
+            /* by x */
+            assert( swc_cutcmp(&aaa, &aaax) == -1 );
+            assert( swc_cutcmp(&aaax, &aaa) == 1 );
+            assert( swc_cutcmp(&aaay, &aaax) == -1 );
+            assert( swc_cutcmp(&aaax, &aaay) == 1 );
+
+            /* by y */
+            assert( swc_cutcmp(&aaa, &aaay) == -1 );
+            assert( swc_cutcmp(&aaay, &aaa) == 1 );
+
+            /* same */
+            assert( swc_cutcmp(&aaa, &aaasame) == 0 );
+
             /* cutsort */
-            cut_file_t *c[3] = {&aaa, &baa, &aab};
-            swc_cutsort(c, 3);
+            cut_file_t *c[5] = {&aaax, &baa, &aaa, &aab, &aaay};
+            swc_cutsort(c, 5);
             assert( strcmp(c[0]->path, aaa.path) == 0 );
-            assert( strcmp(c[1]->path, aab.path) == 0 );
-            assert( strcmp(c[2]->path, baa.path) == 0 );
+            assert( strcmp(c[1]->path, aaay.path) == 0 );
+            assert( strcmp(c[2]->path, aaax.path) == 0 );
+            assert( strcmp(c[3]->path, aab.path) == 0 );
+            assert( strcmp(c[4]->path, baa.path) == 0 );
             return 0;
         }
 
         if(argc == 2 && (strcmp(argv[1], "layerorder") == 0)){
 
-            swc_layer_t la = { {}, 0, -2.0, -0.5 };
-            swc_layer_t lb = { {}, 0, 0.5, 1.0 };
-            swc_layer_t lc = { {}, 0, 2.0, 3.0 };
+            /* layercmp, error */
+            assert( swc_layercmp(NULL, &la) == -2 );
+            assert( swc_layercmp(&la, NULL) == -2 );
+            assert( swc_layercmp(NULL, NULL) == -2 );
 
+            /* layercmp, valid */
             assert( swc_layercmp(&la, &la) == 0 );
             assert( swc_layercmp(&la, &lb) == -1 );
             assert( swc_layercmp(&lb, &la) == 1 );
@@ -110,6 +146,13 @@ int main(int argc, const char* argv[])
             assert( s[1]->zstart == 0.5 );
             assert( s[2]->zstart == 2.0 );
             return 0;
+        }
+
+        if(argc == 2 && (strcmp(argv[1], "neighbors") == 0)){
+
+            /* layercmp, error */
+            assert( swc_layercmp(NULL, &la) == -2 );
+
         }
         /*--------------------------------------------------------*/
 

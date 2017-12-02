@@ -108,7 +108,7 @@ snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc
 
 snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len);
 
-/* @brief return 0 is a and b are same, -1 if a < b, 1 if b < a
+/* @brief function used for ordering. First path is compared with strcmp, then x, then y. Returns -2 if a or b is NULL.
 */
 int swc_cutcmp(cut_file_t * a, cut_file_t * b);
 
@@ -117,9 +117,14 @@ int swc_cutcmp(cut_file_t * a, cut_file_t * b);
 */
 void swc_cutsort(cut_file_t ** cuts, size_t cuts_len);
 
-/* @brief return 0 is a and b are same, -1 if a < b, 1 if b < a
+/* @brief return 0 is a and b are same, -1 if a < b, 1 if b < a. Returns -2 if a or b is NULL.
 */
 int swc_layercmp(swc_layer_t * a, swc_layer_t * b);
+
+/* @brief return -2 if a or b are NULL. returns 0 if layers are neighbors (contiguous on z), and have exact same cuts.
+ * Returns -1 otherwise.
+*/
+int swc_layer_equivalent_neighbors(swc_layer_t * a, swc_layer_t * b);
 
 /* @brief given an array of swc_layer_t of length layers_in_len, sorts them in ascendent order according to
  * swc_layercmp comparison
