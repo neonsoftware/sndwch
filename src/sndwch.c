@@ -321,3 +321,43 @@ int swc_layer_equivalent_neighbor(swc_layer_t * a, swc_layer_t * b){
 
     return 0;
 }
+
+snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** layers_ptr, size_t *layers_len_ptr){
+
+    *layers_len_ptr = 0;
+    *layers_ptr = (swc_layer_t **)calloc(max_files, sizeof(swc_layer_t *));
+
+    /* adding every cut to its corresponding layer (by zmin) */
+    for (size_t i = 0; i < cuts_in_len; i++) {
+
+            cut_file_t *cut_ptr = cuts_in[i];
+            swc_layer_t* corresponding_layer = NULL;
+
+            /* Append to layer */
+
+            /* does layer exist already ? */
+            for(size_t j = 0; i < (*layers_len_ptr); j++)
+                if( (*layers_ptr)[j]->zmin == cut_ptr->zmin)
+                    corresponding_layer = *layers_ptr)[j];
+
+            /* if not, creating a new one and appending it to layers */
+            if(corresponding_layer == NULL){
+                corresponding_layer = (swc_layer_t*) calloc(1, sizeof(swc_layer_t*));
+                (*cuts_ptr)[*cuts_found_ptr] = corresponding_layer;
+                *cuts_found_ptr = (*cuts_found_ptr) + 1;
+            }
+
+            /* adding cut to corresponding layer */
+            corresponding_layer->cuts[corresponding_layer->cuts_len] = cut_ptr;
+            corresponding_layer->cuts_len = corresponding_layer->cuts_len + 1;
+    }
+}
+
+//snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
+
+//}
+
+//snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
+
+//}
+
