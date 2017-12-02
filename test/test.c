@@ -66,8 +66,8 @@ int main()
         /* config file read */
         cut_file_t **cuts;
         cut_file_t **cuts_sliced;
-        int cuts_len;
-        int cuts_sliced_len;
+        size_t cuts_len;
+        size_t cuts_sliced_len;
 
 	/*------------- Reading parameters -----------------------*/
 	{
@@ -122,7 +122,7 @@ int main()
         }
         /*--------------------------------------------------------*/
 
-        /*------------- reading and merging two files ------------*/
+        /*------------- slicing files ------------*/
         {
                 FILE *fp = fopen("./log_slice.txt", "w+");
                 if( fp == NULL )
@@ -139,10 +139,6 @@ int main()
                 }
         }
         /*--------------------------------------------------------*/
-
-
-
-
 
 	return 0;
 }

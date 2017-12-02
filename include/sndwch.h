@@ -94,9 +94,9 @@ snd_err_t swc_import_SVG_elements_from_file(const char *path, char *buf, size_t 
 */
 snd_err_t swc_merge(const char **in_paths, size_t in_paths_size, const char *out_path);
 
-snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, int *cuts_found_ptr);
+snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts, size_t *cuts_found_ptr);
 
-snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *out_path);
+snd_err_t swc_translate_and_merge(cut_file_t **cuts, size_t cuts_len, const char *out_path);
 
 /*
 ** @brief swc_slice Cuts every cut_file_t passed in an input array into many cut_file_t of 0.5 mm thckness
@@ -106,7 +106,7 @@ snd_err_t swc_translate_and_merge(cut_file_t **cuts, int cuts_len, const char *o
 ** @param cuts_out_len pointer number of output cuts created
 ** @return
 */
-snd_err_t swc_slice(cut_file_t **cuts_in, int cuts_in_len, cut_file_t ***cuts_out, int *cuts_out_len);
+snd_err_t swc_slice(cut_file_t **cuts_in, size_t cuts_in_len, cut_file_t ***cuts_out, size_t *cuts_out_len);
   
 #ifdef __cplusplus
 } /* extern "C" */
