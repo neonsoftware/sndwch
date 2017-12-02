@@ -58,7 +58,7 @@ void err_dump(const char *fmt, ...)
 	exit(1); /* shouldn′t get here */
 }
 
-int main()
+int main(int argc, const char* argv[])
 {
 
 	snd_err_t res = SWC_OK;
@@ -68,6 +68,51 @@ int main()
         cut_file_t **cuts_sliced;
         size_t cuts_len;
         size_t cuts_sliced_len;
+
+        /*------------- sort and comparison ------------*/
+        if(argc == 2 && (strcmp(argv[1], "cutorder") == 0)){
+            cut_file_t aaa = {"aaa.svg", 0, 1};
+            cut_file_t aab = {"aab.svg", 0, 1};
+            cut_file_t baa = {"baa.svg", 0, 1};
+
+            /* cutcmp */
+            assert( swc_cutcmp(&aaa, &aaa) == 0 );
+            assert( swc_cutcmp(&aaa, &aab) == -1 );
+            assert( swc_cutcmp(&aab, &aaa) == 1 );
+            assert( swc_cutcmp(&aab, &baa) == -1 );
+            assert( swc_cutcmp(&aaa, &baa) == -1 );
+
+            /* cutsort */
+            cut_file_t *c[3] = {&aaa, &baa, &aab};
+            swc_cutsort(c, 3);
+            assert( strcmp(c[0]->path, aaa.path) == 0 );
+            assert( strcmp(c[1]->path, aab.path) == 0 );
+            assert( strcmp(c[2]->path, baa.path) == 0 );
+            return 0;
+        }
+
+        if(argc == 2 && (strcmp(argv[1], "layerorder") == 0)){
+
+            swc_layer_t la = { {}, 0, -2.0, -0.5 };
+            swc_layer_t lb = { {}, 0, 0.5, 1.0 };
+            swc_layer_t lc = { {}, 0, 2.0, 3.0 };
+
+            assert( swc_layercmp(&la, &la) == 0 );
+            assert( swc_layercmp(&la, &lb) == -1 );
+            assert( swc_layercmp(&lb, &la) == 1 );
+            assert( swc_layercmp(&lb, &lc) == -1 );
+            assert( swc_layercmp(&la, &lc) == -1 );
+
+            swc_layer_t *s[3] = {&lc, &la, &lb};
+
+            swc_layersort(s, 3);
+            assert( s[0]->zstart == -2.0 );
+            assert( s[1]->zstart == 0.5 );
+            assert( s[2]->zstart == 2.0 );
+            return 0;
+        }
+        /*--------------------------------------------------------*/
+
 
 	/*------------- Reading parameters -----------------------*/
 	{
