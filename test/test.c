@@ -11,6 +11,10 @@
 static const size_t max_line = 4096; /* max line length */
 static const size_t max_files = 200; /* max line length */
 
+#define exp_eq_f(a,b) if( (a) != (b) ){ fprintf(stderr, "%s != %s. (%.1f) != (%.1f). Fail.\n", #a, #b, a, b); exit(1); }
+#define exp_eq_u(a,b) if( (a) != (b) ){ fprintf(stderr, "%s != %s. (%u) != (%u). Fail.\n", #a, #b, a, b); exit(1); }
+#define exp_eq_i(a,b) if( (a) != (b) ){ fprintf(stderr, "%s != %s. (%d) != (%d). Fail.\n", #a, #b, a, b); exit(1); }
+
 /*
 ** Print a message and return to caller.
 ** Caller specifies "errnoflag".
@@ -90,38 +94,38 @@ int main(int argc, const char* argv[])
 
 
             /* cutcmp , error */
-            assert( swc_cutcmp(NULL, &aaa) == -2 );
-            assert( swc_cutcmp(&aaa, NULL) == -2 );
-            assert( swc_cutcmp(NULL, NULL) == -2 );
+            exp_eq_i( swc_cutcmp(NULL, &aaa) , -2 );
+            exp_eq_i( swc_cutcmp(&aaa, NULL) , -2 );
+            exp_eq_i( swc_cutcmp(NULL, NULL) , -2 );
 
             /* cutcmp, valid */
             /* by path */
-            assert( swc_cutcmp(&aaa, &aab) == -1 );
-            assert( swc_cutcmp(&aab, &aaa) == 1 );
-            assert( swc_cutcmp(&aab, &baa) == -1 );
-            assert( swc_cutcmp(&aaa, &baa) == -1 );
+            exp_eq_i( swc_cutcmp(&aaa, &aab) , -1 );
+            exp_eq_i( swc_cutcmp(&aab, &aaa) , 1 );
+            exp_eq_i( swc_cutcmp(&aab, &baa) , -1 );
+            exp_eq_i( swc_cutcmp(&aaa, &baa) , -1 );
 
             /* by x */
-            assert( swc_cutcmp(&aaa, &aaax) == -1 );
-            assert( swc_cutcmp(&aaax, &aaa) == 1 );
-            assert( swc_cutcmp(&aaay, &aaax) == -1 );
-            assert( swc_cutcmp(&aaax, &aaay) == 1 );
+            exp_eq_i( swc_cutcmp(&aaa, &aaax) , -1 );
+            exp_eq_i( swc_cutcmp(&aaax, &aaa) , 1 );
+            exp_eq_i( swc_cutcmp(&aaay, &aaax) , -1 );
+            exp_eq_i( swc_cutcmp(&aaax, &aaay) , 1 );
 
             /* by y */
-            assert( swc_cutcmp(&aaa, &aaay) == -1 );
-            assert( swc_cutcmp(&aaay, &aaa) == 1 );
+            exp_eq_i( swc_cutcmp(&aaa, &aaay) , -1 );
+            exp_eq_i( swc_cutcmp(&aaay, &aaa) , 1 );
 
             /* same */
-            assert( swc_cutcmp(&aaa, &aaasame) == 0 );
+            exp_eq_i( swc_cutcmp(&aaa, &aaasame) , 0 );
 
             /* cutsort */
             cut_file_t *c[5] = {&aaax, &baa, &aaa, &aab, &aaay};
             swc_cutsort(c, 5);
-            assert( strcmp(c[0]->path, aaa.path) == 0 );
-            assert( strcmp(c[1]->path, aaay.path) == 0 );
-            assert( strcmp(c[2]->path, aaax.path) == 0 );
-            assert( strcmp(c[3]->path, aab.path) == 0 );
-            assert( strcmp(c[4]->path, baa.path) == 0 );
+            exp_eq_i( strcmp(c[0]->path, aaa.path) , 0 );
+            exp_eq_i( strcmp(c[1]->path, aaay.path) , 0 );
+            exp_eq_i( strcmp(c[2]->path, aaax.path) , 0 );
+            exp_eq_i( strcmp(c[3]->path, aab.path) , 0 );
+            exp_eq_i( strcmp(c[4]->path, baa.path) , 0 );
             return 0;
         }
 
@@ -184,14 +188,14 @@ int main(int argc, const char* argv[])
 
             swc_layer(cs, 5, &layers, &layers_len);
 
-            assert( layers_len == 3 );
+            exp_eq_u( layers_len , 3 );
 
-            assert( (layers[0])->zstart == -10 );
-            assert( (layers[0])->cuts_len == 2);
-            assert( (layers[1])->zstart == -1 );
-            assert( (layers[1])->cuts_len == 2);
-            assert( (layers[2])->zstart == 2.0 );
-            assert( (layers[2])->cuts_len == 1);
+            exp_eq_f( (layers[0])->zstart , -10 );
+            exp_eq_u( (layers[0])->cuts_len , 2);
+            exp_eq_f( (layers[1])->zstart , -1 );
+            exp_eq_u( (layers[1])->cuts_len , 2);
+            exp_eq_f( (layers[2])->zstart , 2.0 );
+            exp_eq_u( (layers[2])->cuts_len , 1);
 
             return 0;
         }
@@ -215,27 +219,27 @@ int main(int argc, const char* argv[])
 
             swc_layer(cs, 5, &layers, &layers_len);
 
-            assert( layers_len == 5 );
-            assert( (layers[0])->zstart == -10 );
-            assert( (layers[0])->cuts_len == 1);
-            assert( (layers[1])->zstart == -9.5 );
-            assert( (layers[1])->cuts_len == 1);
-            assert( (layers[2])->zstart == -9.0 );
-            assert( (layers[2])->cuts_len == 1);
+            exp_eq_u( layers_len , 5 );
+            exp_eq_f( (layers[0])->zstart , -10.0 );
+            exp_eq_u( (layers[0])->cuts_len , 1);
+            exp_eq_f( (layers[1])->zstart , -9.5 );
+            exp_eq_u( (layers[1])->cuts_len , 1);
+            exp_eq_f( (layers[2])->zstart , -9.0 );
+            exp_eq_u( (layers[2])->cuts_len , 1);
 
             swc_minimize_layers(layers, layers_len, &layers_mini, &layers_mini_len);
 
-            assert( layers_mini_len == 3 );
+            exp_eq_u( layers_mini_len , 3 );
 
-            assert( (layers_mini[0])->zstart == -10 );
-            assert( (layers_mini[0])->zend == -9 );
-            assert( (layers_mini[0])->cuts_len == 1);
-            assert( (layers_mini[1])->zstart == -9.0 );
-            assert( (layers_mini[1])->zend == -8.5 );
-            assert( (layers_mini[1])->cuts_len == 1);
-            assert( (layers_mini[2])->zstart == -8.5 );
-            assert( (layers_mini[2])->zend == -7.5 );
-            assert( (layers_mini[2])->cuts_len == 1);
+            exp_eq_f( (layers_mini[0])->zstart , -10.0 );
+            exp_eq_f( (layers_mini[0])->zend , -9.0 );
+            exp_eq_u( (layers_mini[0])->cuts_len , 1);
+            exp_eq_f( (layers_mini[1])->zstart , -9.0 );
+            exp_eq_f( (layers_mini[1])->zend , -8.5 );
+            exp_eq_u( (layers_mini[1])->cuts_len , 1);
+            exp_eq_f( (layers_mini[2])->zstart , -8.5 );
+            exp_eq_f( (layers_mini[2])->zend , -7.5 );
+            exp_eq_u( (layers_mini[2])->cuts_len , 1);
 
             return 0;
         }
