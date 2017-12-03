@@ -303,7 +303,7 @@ void swc_layersort(swc_layer_t** layers, size_t layers_len){
     }
 }
 
-int swc_layer_equivalent_neighbor(swc_layer_t * a, swc_layer_t * b){
+int swc_layer_equivalent_neighbors(swc_layer_t * a, swc_layer_t * b){
 
     if(a == NULL || b == NULL)
         return -2;
@@ -326,8 +326,10 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
 
     *layers_len_ptr = 0;
     *layers_ptr = (swc_layer_t **)calloc(max_files, sizeof(swc_layer_t *));
+    if(*layers_ptr == NULL)
+        return SWC_ERR_ALLOC;
 
-    /* adding every cut to its corresponding layer (by zmin) */
+    /* adding every cut to its corresponding layer (by zstart) */
     for (size_t i = 0; i < cuts_in_len; i++) {
 
             cut_file_t *cut_ptr = cuts_in[i];
@@ -336,21 +338,28 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
             /* Append to layer */
 
             /* does layer exist already ? */
-            for(size_t j = 0; i < (*layers_len_ptr); j++)
-                if( (*layers_ptr)[j]->zmin == cut_ptr->zmin)
-                    corresponding_layer = *layers_ptr)[j];
+            for(size_t j = 0; j < (*layers_len_ptr); j++)
+                if( (*layers_ptr)[j]->zstart == cut_ptr->zstart)
+                    corresponding_layer = (*layers_ptr)[j];
 
             /* if not, creating a new one and appending it to layers */
             if(corresponding_layer == NULL){
                 corresponding_layer = (swc_layer_t*) calloc(1, sizeof(swc_layer_t*));
-                (*cuts_ptr)[*cuts_found_ptr] = corresponding_layer;
-                *cuts_found_ptr = (*cuts_found_ptr) + 1;
+                if(corresponding_layer == NULL)
+                    return SWC_ERR_ALLOC;
+                corresponding_layer->cuts_len = 0;
+                corresponding_layer->zstart = cut_ptr->zstart;
+                corresponding_layer->zend = cut_ptr->zend;
+                (*layers_ptr)[*layers_len_ptr] = corresponding_layer;
+                *layers_len_ptr = (*layers_len_ptr) + 1;
             }
 
             /* adding cut to corresponding layer */
             corresponding_layer->cuts[corresponding_layer->cuts_len] = cut_ptr;
             corresponding_layer->cuts_len = corresponding_layer->cuts_len + 1;
     }
+
+    return SWC_OK;
 }
 
 //snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
