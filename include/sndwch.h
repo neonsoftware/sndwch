@@ -106,7 +106,7 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
 
 snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len);
 
-snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len);
+snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, const char *out_path);
 
 /* @brief function used for ordering. First path is compared with strcmp, then x, then y. Returns -2 if a or b is NULL.
 */

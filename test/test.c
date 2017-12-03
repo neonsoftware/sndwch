@@ -209,11 +209,11 @@ int main(int argc, const char* argv[])
             swc_layer_t **layers_mini = NULL;
             size_t layers_mini_len = 0;
 
-            cut_file_t c1 = {"a.svg", 0, 0, -10, -9.5};
-            cut_file_t c2 = {"a.svg", 0, 0, -9.5, -9.0};
-            cut_file_t c3 = {"b.svg", 0, 0, -9.0, -8.5};
-            cut_file_t c4 = {"c.svg", 0, 0, -8.5, -8.0};
-            cut_file_t c5 = {"c.svg", 0, 0, -8.0, -7.5};
+            cut_file_t c1 = {"./assets/a.svg", 0, 0, -10, -9.5};
+            cut_file_t c2 = {"./assets/a.svg", 0, 0, -9.5, -9.0};
+            cut_file_t c3 = {"./assets/c.svg", 0, 0, -9.0, -8.5};
+            cut_file_t c4 = {"./assets/b.svg", 0, 0, -8.5, -8.0};
+            cut_file_t c5 = {"./assets/b.svg", 0, 0, -8.0, -7.5};
 
             cut_file_t *cs[5] = {&c1, &c2, &c3, &c4, &c5};
 
@@ -241,10 +241,11 @@ int main(int argc, const char* argv[])
             exp_eq_f( (layers_mini[2])->zend , -7.5 );
             exp_eq_u( (layers_mini[2])->cuts_len , 1);
 
+            exp_eq_i(swc_print_layers(layers_mini, layers_mini_len, "."), SWC_OK);
+
             return 0;
         }
         /*--------------------------------------------------------*/
-
 
 	/*------------- Reading parameters -----------------------*/
 	{

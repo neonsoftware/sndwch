@@ -408,7 +408,17 @@ snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc
     return SWC_OK;
 }
 
-//snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
+snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, const char *out_dir){
 
-//}
+    /* adding every cut to its corresponding layer (by zstart) */
+    for (size_t i = 0; i < layers_in_len; i++) {
+        snd_err_t result = SWC_OK;
+        char file_path[swc_max_path];
+        sprintf(file_path, "%s/file#%.1f#%.1f.svg", out_dir, layers_in[i]->zstart, layers_in[i]->zend);
+        result = swc_translate_and_merge(layers_in[i]->cuts, layers_in[i]->cuts_len, file_path);
+        if(result != SWC_OK)
+            return result;
+    }
+    return SWC_OK;
+}
 
