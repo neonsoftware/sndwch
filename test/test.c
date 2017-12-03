@@ -147,12 +147,49 @@ int main(int argc, const char* argv[])
             assert( s[2]->zstart == 2.0 );
             return 0;
         }
+        /*--------------------------------------------------------*/
 
+
+        /*---------------------- Neighbors -----------------------*/
         if(argc == 2 && (strcmp(argv[1], "neighbors") == 0)){
 
-            /* layercmp, error */
-            assert( swc_layercmp(NULL, &la) == -2 );
+            swc_layer_t lbneighbor = { {&aab, &baa}, 2, 1.0, 1.5 };
 
+            /* layercmp, error */
+            assert( swc_layer_equivalent_neighbors(&lb, NULL) == -2 );
+            assert( swc_layer_equivalent_neighbors(NULL, &lb) == -2 );
+            assert( swc_layer_equivalent_neighbors(NULL, NULL) == -2 );
+
+            /* layer, valid */
+            assert( swc_layer_equivalent_neighbors(&lb, &lc) == -1 );
+            assert( swc_layer_equivalent_neighbors(&lb, &lbneighbor) == 0 );
+        }
+        /*--------------------------------------------------------*/
+
+        /*---------------------- Layers -----------------------*/
+        if(argc == 2 && (strcmp(argv[1], "layer") == 0)){
+
+            swc_layer_t **layers = NULL;
+            size_t layers_len = 0;
+
+            cut_file_t c1 = {"c1.svg", 0, 0, -10, -9};
+            cut_file_t c2 = {"c2.svg", 0, 0, -1, 0};
+            cut_file_t c3 = {"c3.svg", 0, 0, 2.0,3.0};
+            cut_file_t c4 = {"c4.svg", 0, 0, -10, -9};
+            cut_file_t c5 = {"c5.svg", 0, 0, -1, 0};
+
+            cut_file_t *cs[5] = {&c1, &c2, &c3, &c4, &c5};
+
+            swc_layer(cs, 5, &layers, &layers_len);
+
+            assert( layers_len == 3 );
+
+                    assert( (layers[0])->zstart == -10 );
+                    assert( (layers[0])->cuts_len == 2);
+                    assert( (layers[1])->zstart == -1 );
+                    assert( (layers[1])->cuts_len == 2);
+                    assert( (layers[2])->zstart == 2.0 );
+                    assert( (layers[2])->cuts_len == 1);
         }
         /*--------------------------------------------------------*/
 
