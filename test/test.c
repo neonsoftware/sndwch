@@ -247,6 +247,15 @@ int main(int argc, const char* argv[])
         }
         /*--------------------------------------------------------*/
 
+        /*-------------------- Full Sandwich ---------------------*/
+        if(argc == 2 && (strcmp(argv[1], "sandwich") == 0)){
+
+            exp_eq_i(swc_sandwich("./assets/cuts.yaml", "./"), SWC_OK);
+
+            return 0;
+        }
+        /*--------------------------------------------------------*/
+
 	/*------------- Reading parameters -----------------------*/
 	{
                 /* prepare file */

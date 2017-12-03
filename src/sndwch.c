@@ -422,3 +422,35 @@ snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, const 
     return SWC_OK;
 }
 
+snd_err_t swc_sandwich(const char *configFilePat, const char *outDirPath){
+
+    /* storage variables */
+    snd_err_t result = SWC_OK;
+    cut_file_t **cuts = NULL;
+    size_t cuts_len = 0;
+    cut_file_t **cuts_sliced = NULL;
+    size_t cuts_sliced_len = 0;
+    swc_layer_t **layers = NULL;
+    size_t layers_len = 0;
+    swc_layer_t **layers_mini = NULL;
+    size_t layers_mini_len = 0;
+
+    result = swc_read_conf_file(configFilePat, &cuts, &cuts_len);
+    if(result != SWC_OK)
+        return result;
+    result = swc_slice(cuts, cuts_len, &cuts_sliced, &cuts_sliced_len);
+    if(result != SWC_OK)
+        return result;
+    result = swc_layer(cuts_sliced, cuts_sliced_len, &layers, &layers_len);
+    if(result != SWC_OK)
+        return result;
+    result = swc_minimize_layers(layers, layers_len, &layers_mini, &layers_mini_len);
+    if(result != SWC_OK)
+        return result;
+    result = swc_print_layers(layers_mini, layers_mini_len, outDirPath);
+    if(result != SWC_OK)
+        return result;
+
+    return SWC_OK;
+}
+

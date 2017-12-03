@@ -80,6 +80,13 @@ typedef struct {
 extern "C" {
 #endif
 
+/* @brief swc_sandwich Given a .yaml config file, processes the cuts and writes resulting .svg file in dir outDirPath
+** @param configFilePat path to the .yaml input config file
+** @param outDirPath path to teh output directory. If not existing it will be created
+** @return SWC_OK in case of success. Other snd_err_t values in case of errors.
+*/
+snd_err_t swc_sandwich(const char *configFilePat, const char *outDirPath);
+
 /* @brief reads all the SVG elements of a file into a buffer
 **
 ** @return SWC_OK in case of success, other snd_err_t otherwise
