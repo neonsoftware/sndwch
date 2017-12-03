@@ -322,6 +322,16 @@ int swc_layer_equivalent_neighbors(swc_layer_t * a, swc_layer_t * b){
     return 0;
 }
 
+void swc_layer_init(swc_layer_t *l){
+    if(l == NULL)
+        return;
+
+
+    l->zstart = 0.0;
+    l->zend = 0.0;
+}
+
+
 snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** layers_ptr, size_t *layers_len_ptr){
 
     *layers_len_ptr = 0;
@@ -344,13 +354,16 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
 
             /* if not, creating a new one and appending it to layers */
             if(corresponding_layer == NULL){
-                corresponding_layer = (swc_layer_t*) calloc(1, sizeof(swc_layer_t*));
+                /* creating new layer */
+                corresponding_layer = (swc_layer_t*) calloc(1, sizeof(swc_layer_t));
                 if(corresponding_layer == NULL)
                     return SWC_ERR_ALLOC;
-                //memset(corresponding_layer->cuts, 0, swc_max_cuts);
+                /* initializing new layer */
+                memset(corresponding_layer->cuts, 0, sizeof(corresponding_layer->cuts));
                 corresponding_layer->cuts_len = 0;
                 corresponding_layer->zstart = cut_ptr->zstart;
                 corresponding_layer->zend = cut_ptr->zend;
+                /* adding new layer to output */
                 (*layers_ptr)[*layers_len_ptr] = corresponding_layer;
                 *layers_len_ptr = (*layers_len_ptr) + 1;
             }
