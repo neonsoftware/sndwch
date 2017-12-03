@@ -132,23 +132,23 @@ int main(int argc, const char* argv[])
         if(argc == 2 && (strcmp(argv[1], "layerorder") == 0)){
 
             /* layercmp, error */
-            assert( swc_layercmp(NULL, &la) == -2 );
-            assert( swc_layercmp(&la, NULL) == -2 );
-            assert( swc_layercmp(NULL, NULL) == -2 );
+            exp_eq_i( swc_layercmp(NULL, &la) , -2 );
+            exp_eq_i( swc_layercmp(&la, NULL) , -2 );
+            exp_eq_i( swc_layercmp(NULL, NULL) , -2 );
 
             /* layercmp, valid */
-            assert( swc_layercmp(&la, &la) == 0 );
-            assert( swc_layercmp(&la, &lb) == -1 );
-            assert( swc_layercmp(&lb, &la) == 1 );
-            assert( swc_layercmp(&lb, &lc) == -1 );
-            assert( swc_layercmp(&la, &lc) == -1 );
+            exp_eq_i( swc_layercmp(&la, &la) , 0 );
+            exp_eq_i( swc_layercmp(&la, &lb) , -1 );
+            exp_eq_i( swc_layercmp(&lb, &la) , 1 );
+            exp_eq_i( swc_layercmp(&lb, &lc) , -1 );
+            exp_eq_i( swc_layercmp(&la, &lc) , -1 );
 
             swc_layer_t *s[3] = {&lc, &la, &lb};
 
             swc_layersort(s, 3);
-            assert( s[0]->zstart == -2.0 );
-            assert( s[1]->zstart == 0.5 );
-            assert( s[2]->zstart == 2.0 );
+            exp_eq_f( s[0]->zstart , -2.0 );
+            exp_eq_f( s[1]->zstart , 0.5 );
+            exp_eq_f( s[2]->zstart , 2.0 );
             return 0;
         }
         /*--------------------------------------------------------*/
@@ -160,13 +160,13 @@ int main(int argc, const char* argv[])
             swc_layer_t lbneighbor = { {&aab, &baa}, 2, 1.0, 1.5 };
 
             /* layercmp, error */
-            assert( swc_layer_equivalent_neighbors(&lb, NULL) == -2 );
-            assert( swc_layer_equivalent_neighbors(NULL, &lb) == -2 );
-            assert( swc_layer_equivalent_neighbors(NULL, NULL) == -2 );
+            exp_eq_i( swc_layer_equivalent_neighbors(&lb, NULL) , -2 );
+            exp_eq_i( swc_layer_equivalent_neighbors(NULL, &lb) , -2 );
+            exp_eq_i( swc_layer_equivalent_neighbors(NULL, NULL) , -2 );
 
             /* layer, valid */
-            assert( swc_layer_equivalent_neighbors(&lb, &lc) == -1 );
-            assert( swc_layer_equivalent_neighbors(&lb, &lbneighbor) == 0 );
+            exp_eq_i( swc_layer_equivalent_neighbors(&lb, &lc) , -1 );
+            exp_eq_i( swc_layer_equivalent_neighbors(&lb, &lbneighbor) , 0 );
 
             return 0;
         }
