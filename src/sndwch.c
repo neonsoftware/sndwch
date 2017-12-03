@@ -347,6 +347,7 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
                 corresponding_layer = (swc_layer_t*) calloc(1, sizeof(swc_layer_t*));
                 if(corresponding_layer == NULL)
                     return SWC_ERR_ALLOC;
+                //memset(corresponding_layer->cuts, 0, swc_max_cuts);
                 corresponding_layer->cuts_len = 0;
                 corresponding_layer->zstart = cut_ptr->zstart;
                 corresponding_layer->zend = cut_ptr->zend;
@@ -362,9 +363,37 @@ snd_err_t swc_layer(cut_file_t **cuts_in, size_t cuts_in_len, swc_layer_t*** lay
     return SWC_OK;
 }
 
-//snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
+snd_err_t swc_minimize_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out_ptr, size_t *layers_out_len_ptr){
 
-//}
+    *layers_out_len_ptr = 0;
+    *layers_out_ptr = (swc_layer_t **)calloc(max_files, sizeof(swc_layer_t *));
+    if(*layers_out_ptr == NULL)
+        return SWC_ERR_ALLOC;
+
+    //swc_layersort(layers_in, layers_in_len);
+
+    size_t current_layer_idx = 0;
+
+    while(current_layer_idx < layers_in_len){
+
+        size_t next_layer_idx = current_layer_idx + 1;
+
+        if( next_layer_idx < layers_in_len &&
+                swc_layer_equivalent_neighbors(layers_in[ current_layer_idx ], layers_in[ next_layer_idx ]) == 0){
+                /* if current and next are equivalent they merge, by making the next start from current's zstart */
+                layers_in[ next_layer_idx ] -> zstart = layers_in[ current_layer_idx ] -> zstart;
+        }else{
+                /* if this layer is unique, goes to output array */
+                (*layers_out_ptr)[*layers_out_len_ptr] = layers_in[ current_layer_idx ];
+                *layers_out_len_ptr = *layers_out_len_ptr + 1;
+        }
+
+        /* iterate */
+        current_layer_idx = next_layer_idx;
+    }
+
+    return SWC_OK;
+}
 
 //snd_err_t swc_print_layers(swc_layer_t** layers_in, size_t layers_in_len, swc_layer_t*** layers_out, size_t *layers_out_len){
 

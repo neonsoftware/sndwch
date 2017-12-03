@@ -163,6 +163,8 @@ int main(int argc, const char* argv[])
             /* layer, valid */
             assert( swc_layer_equivalent_neighbors(&lb, &lc) == -1 );
             assert( swc_layer_equivalent_neighbors(&lb, &lbneighbor) == 0 );
+
+            return 0;
         }
         /*--------------------------------------------------------*/
 
@@ -184,12 +186,58 @@ int main(int argc, const char* argv[])
 
             assert( layers_len == 3 );
 
-                    assert( (layers[0])->zstart == -10 );
-                    assert( (layers[0])->cuts_len == 2);
-                    assert( (layers[1])->zstart == -1 );
-                    assert( (layers[1])->cuts_len == 2);
-                    assert( (layers[2])->zstart == 2.0 );
-                    assert( (layers[2])->cuts_len == 1);
+            assert( (layers[0])->zstart == -10 );
+            assert( (layers[0])->cuts_len == 2);
+            assert( (layers[1])->zstart == -1 );
+            assert( (layers[1])->cuts_len == 2);
+            assert( (layers[2])->zstart == 2.0 );
+            assert( (layers[2])->cuts_len == 1);
+
+            return 0;
+        }
+        /*--------------------------------------------------------*/
+
+        /*---------------------- Minimise -----------------------*/
+        if(argc == 2 && (strcmp(argv[1], "minimise") == 0)){
+
+            swc_layer_t **layers = NULL;
+            size_t layers_len = 0;
+            swc_layer_t **layers_mini = NULL;
+            size_t layers_mini_len = 0;
+
+            cut_file_t c1 = {"a.svg", 0, 0, -10, -9.5};
+            cut_file_t c2 = {"a.svg", 0, 0, -9.5, -9.0};
+            cut_file_t c3 = {"b.svg", 0, 0, -9.0, -8.5};
+            cut_file_t c4 = {"c.svg", 0, 0, -8.5, -8.0};
+            cut_file_t c5 = {"c.svg", 0, 0, -8.0, -7.5};
+
+            cut_file_t *cs[5] = {&c1, &c2, &c3, &c4, &c5};
+
+            swc_layer(cs, 5, &layers, &layers_len);
+
+            assert( layers_len == 5 );
+            assert( (layers[0])->zstart == -10 );
+            assert( (layers[0])->cuts_len == 1);
+            assert( (layers[1])->zstart == -9.5 );
+            assert( (layers[1])->cuts_len == 1);
+            assert( (layers[2])->zstart == -9.0 );
+            assert( (layers[2])->cuts_len == 1);
+
+            swc_minimize_layers(layers, layers_len, &layers_mini, &layers_mini_len);
+
+            assert( layers_mini_len == 3 );
+
+            assert( (layers_mini[0])->zstart == -10 );
+            assert( (layers_mini[0])->zend == -9 );
+            assert( (layers_mini[0])->cuts_len == 1);
+            assert( (layers_mini[1])->zstart == -9.0 );
+            assert( (layers_mini[1])->zend == -8.5 );
+            assert( (layers_mini[1])->cuts_len == 1);
+            assert( (layers_mini[2])->zstart == -8.5 );
+            assert( (layers_mini[2])->zend == -7.5 );
+            assert( (layers_mini[2])->cuts_len == 1);
+
+            return 0;
         }
         /*--------------------------------------------------------*/
 
