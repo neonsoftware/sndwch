@@ -7,7 +7,7 @@ Finally the thing that I want most is to create a box that:
 
 - can be designed and maintained without porper 3D tools
 - can be designed and maintained with cross-platform, free tools
-- can be produced with a laser cutter
+- can provide me files directly good for laser cutter
 - has solid joints
 - looks professional 
 
@@ -22,34 +22,30 @@ Each 2D polygon is contained in a SVG file.
 The extrusions of such poligons are described in a single .yaml file.
 
 * External API
-
 ** Merge  multiple .SVG files into an .SVG file, Use Case 1
 
    swc_err_t swc_merge(const char ** in_paths, size_t in_paths_size, const char* out_path);  
 
-** Parse a .yaml file into a list of cut_3d_t 
+** Parse a .yaml, process all cuts, and print result .SVG files in out_dir_path  
 
-   swc_err_t swc_parse(const char* in_file_path, cut_3d_t *cuts, size_t size, size_t *parsed);
-
-** Merge a sequence of cut_3d_t
-
-   swc_err_t swc_merge(cut_3d_t *in_cuts, size_t in_cuts_size, cut_3d_t *out_cuts, size_t out_cuts_size, size_t out_cuts_written);   
-
-** Write a cut_3d_t into an an .SVG file
-
-   swc_err_t swc_write(cut_3d_t *cut, const char* out_file_path);
+   swc_err_t swc_sandwich(const char* config_file_path, const char * out_dir_path);
 
 * Internal API
 
-  ...
+  ... content of file src/swc_dev.h
 
 * Dependencies
 
-- cmake
-- gtest
+- cmake, ctest
 - libyaml
 - libxml
-
+  
 * Build
 
-  cd build && cmake .. && make
+  cd build && cmake .. && make	
+* TODO
+** Investigate possibility of already defining cut colors 
+** Investigate possibility of defining and cosidering laser depth
+** Handle relative paths in the config file
+*** this should be done in the exposed API, swc_merge, and swc_sandwich
+** Separate internal API from external. Internal API, too large, in src/
