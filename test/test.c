@@ -241,7 +241,7 @@ int main(int argc, const char* argv[])
             exp_eq_f( (layers_mini[2])->zend , -7.5 );
             exp_eq_u( (layers_mini[2])->cuts_len , 1);
 
-            exp_eq_i(swc_print_layers(layers_mini, layers_mini_len, "."), SWC_OK);
+            exp_eq_i(swc_print_layers(layers_mini, layers_mini_len, "./out"), SWC_OK);
 
             return 0;
         }
@@ -250,8 +250,7 @@ int main(int argc, const char* argv[])
         /*-------------------- Full Sandwich ---------------------*/
         if(argc == 2 && (strcmp(argv[1], "sandwich") == 0)){
 
-            exp_eq_i(swc_sandwich("./assets/cuts.yaml", "./"), SWC_OK);
-
+            exp_eq_i(swc_sandwich("./assets/cuts.yaml", "./out/full"), SWC_OK);
             return 0;
         }
         /*--------------------------------------------------------*/
@@ -259,7 +258,7 @@ int main(int argc, const char* argv[])
 	/*------------- Reading parameters -----------------------*/
 	{
                 /* prepare file */
-                FILE *fp = fopen("./log_config_parse.txt", "w+");
+                FILE *fp = fopen("./out/log/log_config_parse.txt", "w+");
                 if( fp == NULL )
                     return 1;
 
@@ -281,7 +280,7 @@ int main(int argc, const char* argv[])
 		const char *paths[2];
 		paths[0] = p1;
 		paths[1] = p2;
-		res = swc_merge(paths, 2, "./merged.svg");
+                res = swc_merge(paths, 2, "./out/merged.svg");
 		if (res != SWC_OK)
 			err_quit("Error Merging.");
 	}
@@ -295,7 +294,7 @@ int main(int argc, const char* argv[])
                 paths[0] = cuts[0]->path;
                 paths[1] = cuts[1]->path;
 
-                res = swc_merge((const char **)paths, 2, "./parsed_and_merged.svg");
+                res = swc_merge((const char **)paths, 2, "./out/parsed_and_merged.svg");
                 if (res != SWC_OK)
                         err_quit("Error Merging.");
         }
@@ -303,7 +302,7 @@ int main(int argc, const char* argv[])
 
         /*------------- reading and merging two files ------------*/
         {
-                res = swc_translate_and_merge(cuts, cuts_len, "./translated.svg");
+                res = swc_translate_and_merge(cuts, cuts_len, "./out/translated.svg");
                 if (res != SWC_OK)
                         err_quit("Error Merging.");
         }
@@ -311,7 +310,7 @@ int main(int argc, const char* argv[])
 
         /*------------- slicing files ------------*/
         {
-                FILE *fp = fopen("./log_slice.txt", "w+");
+                FILE *fp = fopen("./out/log/log_slice.txt", "w+");
                 if( fp == NULL )
                         return 1;
 
