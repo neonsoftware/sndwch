@@ -1,4 +1,5 @@
 #include "sndwch.h"
+#include "sndwch_dev.h"
 #include <yaml.h>
 #include <stdbool.h>
 

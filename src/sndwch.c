@@ -3,37 +3,15 @@
 #include <libxml/xmlwriter.h>
 #include <stdio.h>
 #include "sndwch.h"
+#include "sndwch_dev.h"
 
 #define MY_ENCODING "ISO-8859-1"
 #define MAX_TRANSLATION_LEN 30
 static const size_t max_files = 200; /* max cut_file_t length */
 
-/*************** static local functions, declarations *********************************/
-
-/* @brief Deep equivalence of two swc_cut2d_t
-*/
-//static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
-
-/*
-** @brief parseFileToGroupNode parses an XML file into a xmlNodePtr XML group element
-** @param filePath path of the source XML file
-** @param dst the destination XML group element
-** @return SWC_OK in case of success, SWC_ERR_IN_FILE or SWC_ERR_ALLOC otherwise
-*/
-static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst);
-
-/*
-** @brief xmlTranslateGrp Adds a transformation parameter to an XML group element
-** @param grp the XML group element to translate
-** @param x the translateion x coordinate
-** @param y the translateion y coordinate
-** @return SWC_OK in case of success, or SWC_ERR_ALLOC otherwise
-**/
-static snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y);
-
 /*************** static local functions, implementations ******************************/
 
-static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
+snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
 {
         xmlParserCtxtPtr ctxt; /* the parser context */
         xmlDocPtr doc;	 /* the resulting document tree */
@@ -79,7 +57,7 @@ static snd_err_t parseFileToGroupNode(const char *filePath, xmlNodePtr *dst)
         return SWC_OK;
 }
 
-static snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
+snd_err_t xmlTranslateGrp(xmlNodePtr grp, float x, float y)
 {
         if (grp == NULL) {
                 return SWC_ERR_ALLOC; /* TODO provide a better error*/
@@ -435,6 +413,12 @@ snd_err_t swc_sandwich(const char *configFilePat, const char *outDirPath){
     swc_layer_t **layers_mini = NULL;
     size_t layers_mini_len = 0;
 
+    /* translate to absolute paths */
+    /* TODO */
+
+    /* check that paths exist */
+    /* TODO */
+    
     result = swc_read_conf_file(configFilePat, &cuts, &cuts_len);
     if(result != SWC_OK)
         return result;
