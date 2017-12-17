@@ -1,4 +1,5 @@
 #include "sndwch.h"
+#include "sndwch_dev.h"
 #include <errno.h>  /* for definition of errno */
 #include <stdarg.h> /* ISO C variable aruments */
 #include <stdbool.h>

@@ -1,7 +1,7 @@
 # define  the  executable  in terms  of the  source  files
 add_executable(test_bin  test.c)
-target_include_directories(test_bin PUBLIC ../include)
-target_link_libraries(test_bin LINK_PUBLIC Sndwch)
+target_include_directories(test_bin PUBLIC ../include ../src ${LIBXML2_INCLUDE_DIR})
+target_link_libraries(test_bin LINK_PUBLIC Sndwch xml2 yaml)
 
 # copy test comparison files 
 file(COPY assets DESTINATION .)
