@@ -83,6 +83,18 @@ int main(int argc, const char* argv[])
         swc_layer_t lb = { {&aab, &baa}, 2, 0.5, 1.0 };
         swc_layer_t lc = { {&aab, &baa}, 2, 2.0, 3.0 };
 
+        /*------------- relative path handling ------------*/
+        if(argc == 2 && (strcmp(argv[1], "rel_path") == 0)){
+            char SVGFile[FILENAME_MAX];
+            strncpy(SVGFile, "./a.svg", sizeof(SVGFile));
+
+            exp_eq_i(makeSVGPathAbsolute(NULL, FILENAME_MAX, NULL), SWC_ERR_IN_FILE);
+            exp_eq_i(makeSVGPathAbsolute(NULL, FILENAME_MAX, "./assets/cuts.yaml"), SWC_ERR_IN_FILE);
+            exp_eq_i(makeSVGPathAbsolute(SVGFile, FILENAME_MAX, NULL), SWC_ERR_IN_FILE);
+            exp_eq_i(makeSVGPathAbsolute(SVGFile, FILENAME_MAX, "./assets/cuts.yaml"), SWC_OK);
+        }
+        /*--------------------------------------------------------*/
+
         /*------------- sort and comparison ------------*/
         if(argc == 2 && (strcmp(argv[1], "cutorder") == 0)){
 

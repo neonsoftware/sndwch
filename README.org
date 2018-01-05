@@ -1,4 +1,4 @@
-
+q
 libsndwch
 
 * What problem does it solve 
@@ -36,16 +36,19 @@ The extrusions of such poligons are described in a single .yaml file.
 
 * Dependencies
 
-- cmake, ctest
-- libyaml
-- libxml
-  
-* Build
+** cmake, ctest
+** libyaml
+** libxml
 
+* Build
   cd build && cmake .. && make	
 * TODO
 ** Investigate possibility of already defining cut colors 
 ** Investigate possibility of defining and cosidering laser depth
 ** Handle relative paths in the config file
-*** this should be done in the exposed API, swc_merge, and swc_sandwich
-** Separate internal API from external. Internal API, too large, in src/
+*** prepared proper TODO in the exposed API, swc_merge, and swc_sandwich
+* Documentation
+** This guy's guide https://www.jaygoel.com/blog/laser-cut-enclosure-part-1/  https://www.jaygoel.com/blog/laser-cut-enclosure-lowfi/
+** Ponoko GUide https://www.ponoko.com/blog/2010/10/25/making-enclosures-for-electronics-with-ponoko/
+** Pre-existing tool https://tracesoftouch.wordpress.com/2010/08/21/box-generator/
+

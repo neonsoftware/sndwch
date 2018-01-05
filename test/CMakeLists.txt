@@ -9,6 +9,7 @@ file(COPY assets DESTINATION .)
 # proper testing
 add_test(NAME clean COMMAND rm -fr out)
 add_test(NAME mkdir COMMAND mkdir -p out/full out/log)
+add_test(NAME rel_path COMMAND ./test_bin rel_path)
 add_test(NAME test  COMMAND ./test_bin)
 add_test(NAME parse_yaml COMMAND diff -q ./out/log/log_config_parse.txt assets/expected/config_parse.txt)
 add_test(NAME merge COMMAND diff -q ./out/merged.svg assets/expected/a_b_merged.svg)

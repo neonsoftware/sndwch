@@ -111,6 +111,44 @@ bool parseCutFile(yaml_parser_t *parser, cut_file_t *cut)
 	return true;
 }
 
+snd_err_t makeSVGPathAbsolute(char *svgFilePath, size_t svgFilePath_buf_len, const char *configFilePath){
+
+    FILE *file = NULL;
+
+    if(svgFilePath == NULL || configFilePath == NULL || strlen(svgFilePath) <= strlen(".svg") ){
+        return SWC_ERR_IN_FILE;
+    }
+
+    if( (file = fopen(svgFilePath,"r"))!=NULL){
+        // file exists, assuming it is Absolute, so it's fine as it is
+        fclose(file);
+        return SWC_OK;
+    }
+
+    /* If now we assume is realtive we just try to paste it to the
+    ** file's directory
+    */
+
+    char absolutePathFromRelative[FILENAME_MAX];
+    /* extracting config file's directory */
+    strncpy(absolutePathFromRelative, configFilePath, FILENAME_MAX);
+    size_t conf_dir_path_len = strlen(configFilePath) - strlen("config.yaml");
+    /* adding '/' + relative path */
+    strncpy(absolutePathFromRelative + conf_dir_path_len + 2, svgFilePath, FILENAME_MAX - conf_dir_path_len - 2);
+
+    printf("Checking %s\n", absolutePathFromRelative);
+
+    /* does this file exist ? */
+    if((file = fopen(absolutePathFromRelative,"r"))!=NULL){
+        // file exists, assuming it is Absolute, so it's fine as it is
+        strncpy(svgFilePath, absolutePathFromRelative, svgFilePath_buf_len);
+        fclose(file);
+        return SWC_OK;
+    }
+
+    return SWC_ERR_IN_FILE;
+}
+
 /**
  * @brief read_cut_files_from_yaml
  * @param filePath
@@ -156,6 +194,7 @@ snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts_ptr, size_
 		cut_file_t *new_cut_file = (cut_file_t *)calloc(1, sizeof(cut_file_t));
 		file_parse_success = parseCutFile(&parser, new_cut_file);
 		if (file_parse_success) {
+                        makeSVGPathAbsolute(new_cut_file->path, sizeof(new_cut_file->path), filePath);
                         (*cuts_ptr)[*cuts_found_ptr] = new_cut_file; /* storing new file */
 			*cuts_found_ptr = (*cuts_found_ptr) + 1; /* increasing found count */
 		} else {

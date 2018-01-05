@@ -16,6 +16,14 @@
 */
 //static int isCutEquivalent(swc_cut2d_t *a, swc_cut2d_t *b);
 
+/* @brief user provide either an absolute path or relative to the config file. If
+** path is relative, then retrieve the provided by the user, retrieve the absolute
+** @param filePath path of the source XML file
+** @param dst the destination XML group element
+** @return SWC_OK in case of success, SWC_ERR_IN_FILE or SWC_ERR_ALLOC otherwise
+*/
+snd_err_t makeSVGPathAbsolute(char *svgFilePath, size_t svgFilePath_buf_len, const char *configFilePath);
+
 /*
 ** @brief parseFileToGroupNode parses an XML file into a xmlNodePtr XML group element
 ** @param filePath path of the source XML file

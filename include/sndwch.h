@@ -34,6 +34,8 @@
 #define swc_max_path 256
 #define swc_max_cuts 10
 
+#include "stdio.h"
+
 /* Custom error message type */
 typedef int snd_err_t;
 
@@ -45,7 +47,7 @@ static const snd_err_t SWC_ERR_ALLOC = -3;
 
 
 typedef struct {
-        char path[swc_max_path]; /**< path of the SVG file */
+        char path[FILENAME_MAX]; /**< path of the SVG file */
         float x;		 /**< x offset */
         float y;		 /**< y offset */
         float zstart;	 /**< y offset */
@@ -55,7 +57,7 @@ typedef struct {
 /* @brief An SVG descibes a 2D shape. Such SVG will placed at a (x,y) offset
 */
 typedef struct {
-	char path[swc_max_path]; /**< path of the SVG file */
+        char path[FILENAME_MAX]; /**< path of the SVG file */
 	float x;		 /**< x offset */
 	float y;		 /**< y offset */
 } swc_cut2d_t;
