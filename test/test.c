@@ -89,9 +89,9 @@ int main(int argc, const char* argv[])
             strncpy(SVGFile, "./a.svg", sizeof(SVGFile));
 
             exp_eq_i(makeSVGPathAbsolute(NULL, FILENAME_MAX, NULL), SWC_ERR_IN_FILE);
-            exp_eq_i(makeSVGPathAbsolute(NULL, FILENAME_MAX, "./assets/cuts.yaml"), SWC_ERR_IN_FILE);
+            exp_eq_i(makeSVGPathAbsolute(NULL, FILENAME_MAX, "./assets/config.yaml"), SWC_ERR_IN_FILE);
             exp_eq_i(makeSVGPathAbsolute(SVGFile, FILENAME_MAX, NULL), SWC_ERR_IN_FILE);
-            exp_eq_i(makeSVGPathAbsolute(SVGFile, FILENAME_MAX, "./assets/cuts.yaml"), SWC_OK);
+            exp_eq_i(makeSVGPathAbsolute(SVGFile, FILENAME_MAX, "./assets/config.yaml"), SWC_OK);
         }
         /*--------------------------------------------------------*/
 
@@ -263,7 +263,7 @@ int main(int argc, const char* argv[])
         /*-------------------- Full Sandwich ---------------------*/
         if(argc == 2 && (strcmp(argv[1], "sandwich") == 0)){
 
-            exp_eq_i(swc_sandwich("./assets/cuts.yaml", "./out/full"), SWC_OK);
+            exp_eq_i(swc_sandwich("./assets/config.yaml", "./out/full"), SWC_OK);
             return 0;
         }
         /*--------------------------------------------------------*/
@@ -275,7 +275,7 @@ int main(int argc, const char* argv[])
                 if( fp == NULL )
                     return 1;
 
-                swc_read_conf_file("./assets/cuts.yaml", &cuts, &cuts_len);
+                swc_read_conf_file("./assets/config.yaml", &cuts, &cuts_len);
 
 		for (size_t i = 0; i < cuts_len; i++) {
 			cut_file_t *cut_ptr = cuts[i];
