@@ -134,7 +134,7 @@ snd_err_t makeSVGPathAbsolute(char *svgFilePath, size_t svgFilePath_buf_len, con
     strncpy(absolutePathFromRelative, configFilePath, FILENAME_MAX);
     size_t conf_dir_path_len = strlen(configFilePath) - strlen("config.yaml");
     /* adding '/' + relative path */
-    strncpy(absolutePathFromRelative + conf_dir_path_len + 2, svgFilePath, FILENAME_MAX - conf_dir_path_len - 2);
+    strncpy(absolutePathFromRelative + conf_dir_path_len, svgFilePath, FILENAME_MAX - conf_dir_path_len);
 
     printf("Checking %s\n", absolutePathFromRelative);
 
@@ -196,6 +196,7 @@ snd_err_t swc_read_conf_file(const char *filePath, cut_file_t ***cuts_ptr, size_
 		if (file_parse_success) {
                         makeSVGPathAbsolute(new_cut_file->path, sizeof(new_cut_file->path), filePath);
                         (*cuts_ptr)[*cuts_found_ptr] = new_cut_file; /* storing new file */
+                        printf("New cut is : %s\n", (*cuts_ptr)[*cuts_found_ptr]->path);
 			*cuts_found_ptr = (*cuts_found_ptr) + 1; /* increasing found count */
 		} else {
 			/* deallocating cut that was ready to be read, but was not */
