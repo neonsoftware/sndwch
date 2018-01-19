@@ -8,9 +8,8 @@ before_install:
   - sudo apt-get update
 
 install:
-  - sudo apt-get install cmake qt58base qt58svg qt58charts-no-lgpl qt58xmlpatterns
-  - source /opt/qt58/bin/qt58-env.sh
-
+  - sudo apt-get install build-essential
+  - sudo apt-cache search qt
 
 script:
   - mkdir build
