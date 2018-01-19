@@ -6,11 +6,6 @@ project(sample C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-find_package(LibXml2)
-find_package(LibYaml)
-
-enable_testing()
-
 # define  directories
 set(SRC ${CMAKE_SOURCE_DIR}/src)
 set(TESTS ${CMAKE_SOURCE_DIR}/test)
