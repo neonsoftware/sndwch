@@ -1,5 +1,7 @@
 add_library (sndwch sndwch.c sndwch_fs.c)
 
+set_property(TARGET sndwch  PROPERTY C_STANDARD 99)
+
 find_package(LibXml2)
 find_package(LibYaml)
 
