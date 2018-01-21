@@ -18,4 +18,4 @@ build_script:
 #  - cd build
 #  - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 #  - make
-  - C:\cygwin64\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; C:\cygwin64\bin\cmake .. ; C:\cygwin64\bin\cmake --build ." 
+  - C:\cygwin64\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; /cygdrive/c/cygwin64/bin/cmake .. ; /cygdrive/c/cygwin64/bin/cmake --build ." 
