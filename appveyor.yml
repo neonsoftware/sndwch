@@ -20,4 +20,5 @@ build_script:
 #  - make
   - set PATH=C:\cygwin64;%PATH%
   - echo %PATH%
-  - C:\cygwin64\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; /cygdrive/c/cygwin64/bin/cmake .. ; /cygdrive/c/cygwin64/bin/cmake --build ." 
+  - cd build && cmake .. && cmake --build . 
+#  - C:\cygwin64\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; /cygdrive/c/cygwin64/bin/cmake .. ; /cygdrive/c/cygwin64/bin/cmake --build ." 
