@@ -15,6 +15,7 @@ build_script:
   - vcpkg search yaml
   - vcpkg install libxml2
   - C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libyaml-devel
-  - cd build
-  - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
-  - make
+#  - cd build
+#  - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+#  - make
+  - C:\cygwin\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake .. ; make" 
