@@ -10,15 +10,8 @@ image: Visual Studio 2017
 clone_depth: 1
 
 build_script:
-#  - vcpkg search sqlite
-#  - vcpkg search libxml2
-#  - vcpkg search yaml
-#  - vcpkg install libxml2
   - C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libyaml-devel -P libxml2-devel -P libiconv-devel -P cmake
-#  - cd build
-#  - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
-#  - make
   - set PATH=C:\cygwin64\bin;%PATH%
   - echo %PATH%
-  - cd build && cmake -G "Visual Studio 15 2017 Win64" .. && cmake --build . 
-#  - C:\cygwin64\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; exec 0</dev/null; cd build; /cygdrive/c/cygwin64/bin/cmake .. ; /cygdrive/c/cygwin64/bin/cmake --build ." 
+#  - cd build && cmake -G "Visual Studio 15 2017 Win64" .. && cmake --build .
+  - cd build && cmake .. && cmake --build . 
