@@ -1,5 +1,4 @@
 language: c
-compiler: gcc
 
 os:
   - linux
@@ -9,9 +8,6 @@ addons:
   apt:
     packages:
       - build-essential
-
-before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
 
 script:
   - cd build
