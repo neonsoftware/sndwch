@@ -1,6 +1,4 @@
-enable_testing()
-
-add_executable(test_bin  test.c)
+add_executable(test_bin test.c)
 
 set_property(TARGET test_bin PROPERTY C_STANDARD 99)
 
