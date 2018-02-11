@@ -9,8 +9,8 @@
 #include <yaml.h>
 #include <yaml.h>
 
-static const size_t max_line = 4096; /* max line length */
-static const size_t max_files = 200; /* max line length */
+#define max_line 4096 /* max line length */
+#define max_files 200 /* max line length */
 
 #define exp_eq_f(a,b) if( (a) != (b) ){ fprintf(stderr, "%s != %s. (%.1f) != (%.1f). Fail.\n", #a, #b, a, b); exit(1); }
 #define exp_eq_u(a,b) if( (a) != (b) ){ fprintf(stderr, "%s != %s. (%u) != (%u). Fail.\n", #a, #b, a, b); exit(1); }
