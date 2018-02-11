@@ -6,9 +6,9 @@
 **
 */
 
-#include <stddef.h>
-#include <stdint.h>
-#include <strings.h>
+//#include <stddef.h>
+//#include <stdint.h>
+//#include <strings.h>
 
 /* @page API
 **
