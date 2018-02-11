@@ -3,8 +3,8 @@
 #include <yaml.h>
 #include <stdbool.h>
 
-static const size_t max_line = 4096; /* max line length */
-static const size_t max_files = 200; /* max cut_file_t length */
+#define max_line 4096 /* max line length */
+#define max_files 200 /* max cut_file_t length */
 
 bool parseKeyScalar(yaml_parser_t *parser, const char *keyName)
 {
