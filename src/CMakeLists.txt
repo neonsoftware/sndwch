@@ -6,6 +6,7 @@ find_package(LibXml2)
 find_package(LibYaml)
 
 include_directories(${LIBXML2_INCLUDE_DIR})
+include_directories(${LIBYAML_INCLUDE_DIR})
 
 target_include_directories (sndwch PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
