@@ -4,7 +4,7 @@ set_property(TARGET test_bin PROPERTY C_STANDARD 99)
 
 target_include_directories(test_bin PUBLIC ../include ../src ${LIBXML2_INCLUDE_DIR} ${LIBYAML_INCLUDE_DIR})
 
-target_link_libraries(test_bin LINK_PUBLIC sndwch libxml2 yaml)
+target_link_libraries(test_bin LINK_PUBLIC sndwch  ${LIBYAML_LIBRARIES} ${LIBXML2_LIBRARIES})
 
 # copy test comparison files 
 file(COPY assets DESTINATION .)
