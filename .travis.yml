@@ -8,6 +8,7 @@ addons:
   apt:
     packages:
       - build-essential
+      - libxml2-dev
 
 script:
   - cd build
