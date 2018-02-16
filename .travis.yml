@@ -12,6 +12,7 @@ addons:
 
 script:
   - cd build
+  - cmake -LAH ..
   - cmake ..
   - make VERBOSE=1
   - ctest
