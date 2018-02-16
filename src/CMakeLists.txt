@@ -12,4 +12,4 @@ target_include_directories(sndwch PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include 
 install (TARGETS sndwch ARCHIVE DESTINATION lib)
 install (FILES ../include/sndwch.h DESTINATION include)
 
-target_link_libraries(sndwch LINK_PUBLIC ${LIBYAML_LIBRARIES} ${LIBXML2_LIBRARY})
+target_link_libraries(sndwch LINK_PUBLIC ${LIBYAML_LIBRARIES} ${LIBXML2_LIBRARY} ${LIBXML2_LIBRARIES})
