@@ -1,5 +1,7 @@
 language: c
 
+
+
 os:
   - linux
   - osx
@@ -14,4 +16,4 @@ script:
   - cd build
   - cmake ..
   - cmake --build .
-  - ctest
+  - make VERBOSE=1
