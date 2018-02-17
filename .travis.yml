@@ -13,3 +13,18 @@ addons:
 script:
   - cd build
   - cmake .. && cmake --build . && ctest
+
+before_deploy:
+- cd ..
+- export EXP_ZIP_FILE=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+- echo zip file is ${EXP_ZIP_FILE} from ${TRAVIS_BUILD_DIR}
+- tar -zcf ${EXP_ZIP_FILE} ${TRAVIS_BUILD_DIR}
+
+deploy:
+  provider: releases
+  api_key:
+    secure: R+6uHDsZC8nanUFl0PqGyshFYG4gRjlqiM6SgBzASmqkjtpIXh9+0/NdUee+PcEd2xNfRSK+m6ClISTgTDXiV8xoX3kFzzOVXvfTCCIewR1KjaPmmOg1xHzt7ioLf1DDIkPT+9STLFwtHYmYZlfR1DZrYyL7+PtlXv2QPsmtjYXit42ECVOJ7zzxVJyu2L1YsUUqvdcg0I3JuXVQfzquUK4ijYzgogOQrHkW6I+HLsVxdzPGzyzZB4NvGXeIOzvPw4peklrZAP+CRK5ig5WNhw4NMUjM8SvYWCXH318bC+htp1c3MyGUYWqsbjzIYNKSjk7r+svYhAk3eIpggzZ28p+obHNL9dnIWQKpW9P7cCPjSUbNZOTffUCvy7jJg3uKoHv53JSyOE8s4V9OB0sb6v45DfbZL3rY8tz6FmQ6ZG9xQM5wC4j2FOwwYglpbClI85d94PpigXnvLZUE9ZpN3IO2SMpy2YSIThegFHAF0LbREuSBE82Wwyum+S2R6J+8hQv0DeJuDLC8vbmsXhIOpnP/A9tXYzNuMY+jTtTNr+14foynw2UqemBy/YglE+kkB38EXv/H+74aU5ZLupv3Q3j0S6U8OSMWHoy2R5XDQdQxN8wN9qsSt9kHvO8bcj/ISsh22sl5vrIq1JweWS0dPia08y9wayODaldDWOlpCnQ=
+  file: '${EXP_ZIP_FILE}'
+  skip_cleanup: true
+  on:
+    tags: true
