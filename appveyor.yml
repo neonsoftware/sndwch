@@ -7,9 +7,8 @@ environment:
   release_dir: '%APPVEYOR_BUILD_FOLDER%\libsndwch-win-%APPVEYOR_REPO_TAG_NAME%'
 
 init:
-  - echo release dir is "%release_dir%"
-  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+#  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+#  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
   - vcpkg install libxml2:x64-windows
 
 before_build:
@@ -28,7 +27,6 @@ after_build:
   - mkdir "%release_dir%"
   - copy "src\Debug\sndwch.lib" "%release_dir%"
   - copy "include\sndwch.h" "%release_dir%"
-  - echo Zipping the result...
   - 7z a "%release_dir%.zip" "%release_dir%"
 
 artifacts:

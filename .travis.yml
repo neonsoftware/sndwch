@@ -8,10 +8,10 @@ env:
   - RELEASE_ARCHIVE=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
 
 script:
-  - cd build && cmake .. && cmake --build . && ctest && cd ..
+  - cd build && cmake .. && cmake --build . --target install && ctest && cd ..
 
 before_deploy:
-  - tar -zcf ${RELEASE_ARCHIVE} ${TRAVIS_BUILD_DIR}
+  - tar -zcf ${RELEASE_ARCHIVE} /usr/local/lib/libsndwch.a /usr/local/include/sndwch.h
 
 deploy:
   provider: releases
