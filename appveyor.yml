@@ -23,10 +23,6 @@ build:
   verbosity: detailed
 
 after_build:
-  #- mkdir "%release_dir%"
-  #- copy "src\Debug\sndwch.lib" "%release_dir%"
-  #- copy "include\sndwch.h" "%release_dir%"
-  #- 7z a "%release_dir%.zip" "%release_dir%"
   - 7z a "%release_dir%.zip" "src\Debug\sndwch.lib" "include\sndwch.h"
 
 artifacts:
