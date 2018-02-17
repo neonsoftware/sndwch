@@ -1,17 +1,18 @@
-image: Visual Studio 2017
+image: Visual Studio 2015
 
-#environment:
-#  matrix:
-#  - QT: C:\Qt\5.7\msvc2015_64
-#    PLATFORM: amd64
-#    COMPILER: msvc
-#    VSVER: 14
+init:
+  - dir C:\Qt\5.10.0
+  - dir C:\Qt\5.10.0\msvc2015_64
+  - dir C:\Qt\5.10.0\msvc2015_64\bin
+  - dir C:\Qt\5.10.0\msvc2015_64\lib
+  - set QTDIR=C:/Qt/5.10.0/msvc2015_64
+  - set PATH=%QTDIR%\bin;%PATH%
+  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
-clone_depth: 1
-
-build_script:
-  - C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -s http://cygwin.mirror.constant.com -l C:/cygwin/var/cache/setup -P libyaml-devel -P libxml2-devel -P libiconv-devel -P cmake
-  - set PATH=C:\cygwin64\bin;%PATH%
-  - echo %PATH%
-#  - cd build && cmake -G "Visual Studio 15 2017 Win64" .. && cmake --build .
-  - cd build && cmake .. && cmake --build . && ctest
+install:
+  - vcpkg install libxml2:x64-windows
+  - git clone https://github.com/yaml/libyaml
+  - cd libyaml && cmake -G "Visual Studio 14 2015 Win64"  -DBUILD_SHARED_LIBS=a . && cmake --build . --target install && cd ..
+  - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_MODULE_PATH="C:/Program Files/yaml/cmake" -DCMAKE_PREFIX_PATH="c:/tools/vcpkg/installed/x64-windows;C:/Program Files/yaml" . 
+  - cmake --build . --target install
