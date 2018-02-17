@@ -5,13 +5,14 @@ os:
   - osx
 
 env:
-  - RELEASE_ARCHIVE=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+  - RELEASE_DIR=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}
+  - RELEASE_ARCHIVE=${RELEASE_DIR}.tar.gz
 
 script:
-  - cd build && cmake .. && cmake --build . --target install && ctest && cd ..
+  - cd build && cmake -DCMAKE_INSTALL_PREFIX=${RELEASE_DIR} .. && cmake --build . --target install && ctest && cd ..
 
 before_deploy:
-  - tar -zcf ${RELEASE_ARCHIVE} /usr/local/lib/libsndwch.a /usr/local/include/sndwch.h
+  - tar -zcf ${RELEASE_ARCHIVE} ${RELEASE_DIR}
 
 deploy:
   provider: releases
