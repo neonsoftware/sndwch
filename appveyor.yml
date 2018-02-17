@@ -16,3 +16,8 @@ install:
   - cd libyaml && cmake -G "Visual Studio 14 2015 Win64"  -DBUILD_SHARED_LIBS=a . && cmake --build . --target install && cd ..
   - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_MODULE_PATH="C:/Program Files/yaml/cmake" -DCMAKE_PREFIX_PATH="c:/tools/vcpkg/installed/x64-windows;C:/Program Files/yaml" . 
   - cmake --build . --target install
+  - 7z a libsndwch.zip "C:/Program Files/sample/"
+
+artifacts:
+  - path: libsndwch.zip
+    name: libsndwch
