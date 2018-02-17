@@ -11,8 +11,7 @@ script:
   - cd build && cmake -DCMAKE_INSTALL_PREFIX=${RELEASE_DIR} .. && cmake --build . --target install && ctest && cd ..
 
 before_deploy:
-  - echo tar -zcf ${RELEASE_ARCHIVE} ${RELEASE_DIR}
-  - tar -zcf ${RELEASE_ARCHIVE} ${RELEASE_DIR}
+  - tar -zcf ${RELEASE_ARCHIVE} ${RELEASE_DIR}/*
 
 deploy:
   provider: releases
