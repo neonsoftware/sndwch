@@ -24,7 +24,3 @@ build_script:
 artifacts:
   - path: libsndwch.zip
     name: libsndwch
-
-deploy:
-    # Deploy to GitHub Releases
-  - provider: GitHub
