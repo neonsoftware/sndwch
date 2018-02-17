@@ -3,7 +3,11 @@ image: Visual Studio 2015
 # Start builds on tags only
 skip_non_tags: true
 
+environment:
+  release_dir: '%APPVEYOR_BUILD_FOLDER%\libsndwch-win-%APPVEYOR_REPO_TAG_NAME%'
+
 init:
+  - echo release dir is "%release_dir%"
   - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
   - vcpkg install libxml2:x64-windows
@@ -11,10 +15,9 @@ init:
 before_build:
   # build and install libyaml
   - git clone https://github.com/yaml/libyaml
-  - cd libyaml && cmake -G "Visual Studio 14 2015 Win64"  -DBUILD_SHARED_LIBS=a . && cmake --build . --target install && cd ..
+  - cd libyaml && cmake -G "Visual Studio 14 2015 Win64" -DBUILD_SHARED_LIBS=a . && cmake --build . --target install && cd ..
   # prepare cmake project
   - cmake -G "Visual Studio 14 2015 Win64" -DCMAKE_MODULE_PATH="C:/Program Files/yaml/cmake" -DCMAKE_PREFIX_PATH="c:/tools/vcpkg/installed/x64-windows;C:/Program Files/yaml" . 
-  - dir
 
 build:
   parallel: true                  # enable MSBuild parallel builds
@@ -26,7 +29,11 @@ build:
 #  - cmake --build . --target install
 
 after_build:
-  - 7z a libsndwch-win-%APPVEYOR_REPO_TAG_NAME%.zip "C:/Program Files/libsndwch/"
+  - mkdir "%release_dir%"
+  - copy "..\src\Debug\sndwch.lib" "%release_dir%"
+  - copy "..\include\sndwch.h" "%release_dir%"
+  - echo Zipping the result...
+  - 7z a "%release_dir%.zip" "%release_dir%"
 
 artifacts:
   - path: '*.zip'

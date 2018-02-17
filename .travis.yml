@@ -1,20 +1,24 @@
 language: c
 os:
-- linux
-- osx
-addons:
-  apt:
-    packages:
-    - build-essential
-    - libxml2-dev
+  - linux
+  - osx
+
+#addons:
+#  apt:
+#    packages:
+#    - build-essential
+#    - libxml2-dev
+
 script:
-- cd build
-- cmake .. && cmake --build . && ctest
+  - cd build
+  - cmake .. && cmake --build . && ctest
+
 before_deploy:
-- cd ..
-- export EXP_ZIP_FILE=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
-- echo zip file is ${EXP_ZIP_FILE} from ${TRAVIS_BUILD_DIR}
-- tar -zcf ${EXP_ZIP_FILE} ${TRAVIS_BUILD_DIR}
+  - cd ..
+  - export EXP_ZIP_FILE=${TRAVIS_BUILD_DIR}${REPO}-${TRAVIS_OS_NAME}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz
+  - echo zip file is ${EXP_ZIP_FILE} from ${TRAVIS_BUILD_DIR}
+  - tar -zcf ${EXP_ZIP_FILE} ${TRAVIS_BUILD_DIR}
+
 deploy:
   provider: releases
   api_key:
