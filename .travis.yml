@@ -5,8 +5,7 @@ os:
   - osx
 
 env:
-  - RELEASE_DIR=${TRAVIS_BUILD_DIR}/release/libsndwch-${TRAVIS_OS_NAME}-${TRAVIS_TAG}
-  - RELEASE_ARCHIVE=${RELEASE_DIR}.tar.gz
+  - RELEASE_DIR=${TRAVIS_BUILD_DIR}/release/libsndwch-${TRAVIS_OS_NAME}-${TRAVIS_TAG} RELEASE_ARCHIVE=${RELEASE_DIR}.tar.gz
 
 script:
   - cd build && cmake -DCMAKE_INSTALL_PREFIX=${RELEASE_DIR} .. && cmake --build . --target install && ctest && cd ..
