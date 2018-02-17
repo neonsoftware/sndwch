@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Define project
-project(sample C)
+project(libsndwch C)
 
 include(CTest)
 
