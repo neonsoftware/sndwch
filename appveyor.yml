@@ -24,13 +24,10 @@ build:
   project: libsndwch.sln          # path to Visual Studio solution or project
   verbosity: detailed
 
-#build_script:  
-#  - cmake --build . --target install
-
 after_build:
   - mkdir "%release_dir%"
-  - copy "..\src\Debug\sndwch.lib" "%release_dir%"
-  - copy "..\include\sndwch.h" "%release_dir%"
+  - copy "src\Debug\sndwch.lib" "%release_dir%"
+  - copy "include\sndwch.h" "%release_dir%"
   - echo Zipping the result...
   - 7z a "%release_dir%.zip" "%release_dir%"
 
