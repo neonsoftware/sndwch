@@ -12,4 +12,4 @@ addons:
 
 script:
   - cd build
-  - cmake .. && cmake --buiod . && ctest
+  - cmake .. && cmake --build . && ctest
