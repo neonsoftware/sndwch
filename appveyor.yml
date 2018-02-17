@@ -22,8 +22,7 @@ before_build:
 build:
   parallel: true                  # enable MSBuild parallel builds
   project: libsndwch.sln          # path to Visual Studio solution or project
-  # MSBuild verbosity level quiet|minimal|normal|detailed
-  #verbosity: quiet|minimal|normal|detailed
+  verbosity: detailed
 
 #build_script:  
 #  - cmake --build . --target install
