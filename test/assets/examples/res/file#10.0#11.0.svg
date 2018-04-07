@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g transform="translate(2.3, 4.0)">
+  <g stroke="rgb(255,0,0)" stroke-width="0.2pt" fill="none">
+    <rect x="0.00" y="0.00" width="69.60" height="69.60"/>
+    <g transform="translate(0.80,0.80)">
+      <circle cx="3.00" cy="3.00" r="1.35"/>
+      <circle cx="65.00" cy="3.00" r="1.35"/>
+      <circle cx="3.00" cy="65.00" r="1.35"/>
+      <circle cx="65.00" cy="65.00" r="1.35"/>
+    </g>
+  </g>
+</g><g transform="translate(2.3, 4.0)">
+  <g stroke="rgb(255,0,0)" stroke-width="0.2pt" fill="none">
+    <rect x="0.00" y="0.00" width="69.60" height="69.60"/>
+    <g transform="translate(0.80,0.80)">
+      <circle cx="3.00" cy="3.00" r="1.35"/>
+      <circle cx="65.00" cy="3.00" r="1.35"/>
+      <circle cx="3.00" cy="65.00" r="1.35"/>
+      <circle cx="65.00" cy="65.00" r="1.35"/>
+    </g>
+  </g>
+</g></svg>
