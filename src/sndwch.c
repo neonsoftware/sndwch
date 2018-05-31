@@ -2,6 +2,7 @@
 #include <libxml/tree.h>
 #include <libxml/xmlwriter.h>
 #include <stdio.h>
+#include <string.h>
 #include "sndwch.h"
 #include "sndwch_dev.h"
 
